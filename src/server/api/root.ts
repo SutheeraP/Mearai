@@ -1,6 +1,7 @@
 // import { postRouter } from "~/server/api/routers/post";
 import { postRouter } from "~/server/api/routers/Posts/posts.router";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { tweetRouter } from "./routers/tweets/router";
 // import {UserRouter} from "@modules/users";
 
 /**
@@ -10,6 +11,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  tweet: tweetRouter,
 });
 
 // export type definition of API

@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton, SignIn } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export const metadata: Metadata = {
   title: "S:TwitterClone",
@@ -20,14 +20,6 @@ export default function RootLayout({
       <TRPCReactProvider>
         <html lang="en" className={`${GeistSans.variable}`}>
           <body>
-            {/* <SignedOut/> */}
-            {/* <SignedOut>
-              <SignInButton />
-            </SignedOut> */}
-
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
             {children}
           </body>
         </html>
