@@ -1,6 +1,5 @@
 "use client"
 
-import React from 'react'
 import { api } from '~/trpc/react';
 import { useRouter } from 'next/navigation'
 
@@ -10,6 +9,7 @@ type Props = {
 
 export default function CreateTweet({ userId }: Props) {
     const createTweet = api.tweet.createTweet.useMutation({})
+
     const router = useRouter()
 
     const handleSubmit = (formData: FormData) => {

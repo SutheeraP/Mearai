@@ -20,6 +20,10 @@ export default async function Navbar() {
                 <span className='font-medium leading-tight'> {user?.username}</span>
             </div>
             {user && <CreateTweet userId={user.id} />}
+            <div className='text-sm text-slate-500'>
+                <div>Click the profile to <span className='italic'>edit profile</span>  or <span className='italic'>log out</span></div>
+                <div>Refresh page to see latest tweet</div>
+            </div>
         </div >
     )
 }
