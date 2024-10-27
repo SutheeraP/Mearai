@@ -1,24 +1,20 @@
-import { UserButton } from "@clerk/nextjs";
-import { type PropsWithChildren, type ReactNode } from "react";
-import CreateTweet from "../_components/CreateTweet";
-
-// type LayoutProps = PropsWithChildren<{
-//     trends: ReactNode;
-// }>;
+import { type PropsWithChildren } from "react";
+import Navbar from "../_components/Navbar";
+import Header from "../_components/Header";
 
 export default function Layout({ children }: PropsWithChildren) {
     return (
-        <div className="grid h-[100vh] grid-cols-[25%,45%,30%] items-stretch dark:bg-gray-800">
-            <div className="overflow-hidden border-r border-slate-500">
-                {/* <NavBar /> */}
-                Nav bar
-                <UserButton />
-                <CreateTweet />
+        <div className="bg-gray-800 text-white text-opacity-90">
+            <Header />
+            <div className="grid h-[100vh] grid-cols-[25%,45%,30%] gap-4 items-stretch">
+                <div className="overflow-hidden">
+                    <Navbar />
+                </div>
+                <div className="overflow-scroll">
+                    {children}
+                </div>
+                <div className="">Trend</div>
             </div>
-            <div className="overflow-scroll border-r border-slate-500 bg-gray-900">
-                {children}
-            </div>
-            <div className="">Trend</div>
         </div>
     );
 }

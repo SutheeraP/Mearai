@@ -31,19 +31,19 @@ export default function CreateTweet() {
         <div>
             <form
                 action={handleSubmit}
-                className="grid h-48 grid-cols-[15%,85%] bg-gray-800 pl-2 pr-2 text-white"
+                className="grid gap-4"
             >
-                <input
+                <textarea
                     name="tweetText"
-                    type="text"
                     placeholder="What's happening!?"
                     // onChange={handleInputChange}
                     // value={tweetText}
-                    className="border-bottom m-2 border-black bg-transparent placeholder:text-gray-400 focus:outline-none"
-                ></input>
-                <div className="flex flex-row items-center justify-end border-t border-blue-300">
+                    className="border rounded-md p-2 w-full min-h-20 border-slate-100 border-opacity-50 bg-transparent placeholder:text-gray-400 focus:outline-none"
+                ></textarea>
+                <div className="flex">
                     <button
                         type="submit"
+                        className='w-full py-2 rounded-md bg-slate-100 text-gray-800 font-semibold'
                     // disabled={!submitEnabled}
                     // className={`h-max w-max rounded ${submitEnabled
                     //     ? "cursor-pointer bg-blue-400"

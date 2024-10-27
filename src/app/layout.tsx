@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <ClerkProvider afterSignOutUrl={'/sign-in'}>
       <TRPCReactProvider>
-        <html lang="en" className={`${GeistSans.variable}`}>
+        <html lang="en" className={`${GeistSans.variable} bg-gray-800`}>
           <body>
             {children}
           </body>
