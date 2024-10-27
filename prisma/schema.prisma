@@ -22,3 +22,14 @@ model Post {
 
     @@index([name])
 }
+
+model Tweet {
+   id         Int      @id @default(autoincrement())
+   text       String
+   timestamp  DateTime @default(now())
+   likes      Int      @default(0)
+   retweets   Int      @default(0)
+   is_retweet Boolean  @default(false)
+   is_reply   Boolean  @default(false)
+}
+

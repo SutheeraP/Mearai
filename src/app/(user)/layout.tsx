@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
 import { type PropsWithChildren, type ReactNode } from "react";
+import CreateTweet from "../_components/CreateTweet";
 
 // type LayoutProps = PropsWithChildren<{
 //     trends: ReactNode;
@@ -12,6 +13,7 @@ export default function Layout({ children }: PropsWithChildren) {
                 {/* <NavBar /> */}
                 Nav bar
                 <UserButton />
+                <CreateTweet />
             </div>
             <div className="overflow-scroll border-r border-slate-500 bg-gray-900">
                 {children}
