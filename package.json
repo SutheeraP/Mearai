@@ -24,6 +24,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.0.2",
     "@neondatabase/serverless": "^0.9.5",
     "@planetscale/database": "^1.19.0",
     "@prisma/adapter-neon": "^5.21.1",
