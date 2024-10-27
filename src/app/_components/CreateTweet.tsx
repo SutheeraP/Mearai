@@ -2,29 +2,24 @@
 import React from 'react'
 import { api } from '~/trpc/react';
 
-export default function CreateTweet() {
+type Props = {
+    userId: string;
+};
+
+export default function CreateTweet({ userId }: Props) {
     const createTweet = api.tweet.createTweet.useMutation({})
 
     const handleSubmit = (formData: FormData) => {
         const tweetTextVal = formData.get("tweetText") as string;
         createTweet.mutate({
             text: tweetTextVal,
-            likes: 10,
-            retweets: 5,
+            user_id: userId,
+            likes: 0,
+            retweets: 0,
             timestamp: new Date().toISOString(),
             is_retweet: false,
             is_reply: false,
         });
-        // if (!(user?.id)) return;
-        // createTweet.mutate({
-        //     text: tweetTextVal,
-        //     likes: 10,
-        //     retweets: 5,
-        //     timestamp: new Date().toISOString(),
-        //     is_retweet: false,
-        //     is_reply: false,
-        //     user_id: 1,
-        // });
     };
 
     return (

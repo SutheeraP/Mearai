@@ -13,12 +13,12 @@ export default async function Navbar() {
         },
     }
     return (
-        <div className='flex flex-col gap-4 px-3 pt-2'>
+        <div className='flex flex-col gap-4 px-3'>
             <div className='flex gap-4 items-center'>
                 <span><UserButton appearance={userButtonAppearance} /></span>
                 <span className='font-medium leading-tight'> {user?.username}</span>
             </div>
-            <CreateTweet />
+            {user && <CreateTweet userId={user.id} />}
         </div >
     )
 }

@@ -25,6 +25,7 @@ model Post {
 
 model Tweet {
    id         Int      @id @default(autoincrement())
+   userId     String   
    text       String
    timestamp  DateTime @default(now())
    likes      Int      @default(0)

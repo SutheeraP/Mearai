@@ -1,12 +1,17 @@
 import React from 'react'
 import { type Tweet } from '@prisma/client'
 import Image from 'next/image';
+// import { clerkClient } from '@clerk/nextjs/server';
+import { createClerkClient } from '@clerk/backend'
+const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
 
 type Props = {
   tweet: Tweet;
 };
 
 export default async function Tweet({ tweet }: Props) {
+  // const userID = tweet.userId
+  const postUser = await clerkClient.users.getUser(tweet.userId)
   const options = {
     // year: "numeric",
     month: "long",
@@ -16,14 +21,15 @@ export default async function Tweet({ tweet }: Props) {
     <div>
       <section
         key={tweet.id}
-        className="grid grid-cols-[15%,85%] px-2 py-2"
+        className="flex gap-2 px-4 py-3"
       >
-        <div className="flex items-center justify-center">
-          <Image src={''} width={10} height={10} alt='Profile Image' />
+        <div className="flex items-start justify-center">
+          <Image src={postUser.imageUrl} alt='Profile Image' width={40} height={40} className="rounded-full aspect-square object-cover" />
         </div>
-        <div className="grid grid-rows-3">
+
+        <div className="flex flex-col">
           <div className="mb-2 flex items-center gap-2">
-            <h2 className="font-semibold">username</h2>
+            <h2 className="font-semibold">{postUser.username}</h2>
             <p>·</p>
             <p className="text-slate-500">
               {tweet.timestamp.toLocaleDateString("en-US")}
@@ -33,23 +39,12 @@ export default async function Tweet({ tweet }: Props) {
             </p>
           </div>
           <div>{tweet.text}</div>
-          <div className="grid grid-cols-4 justify-center">
+          {/* <div className="grid grid-cols-4 justify-center">
             <div className="flex items-center">
-              {/* <HeartHandshake className={iconGap} /> */}
               Like
               <div>{tweet.likes}</div>
             </div>
-            <div className="flex items-center">
-              {/* <Repeat2 className={iconGap} /> */}
-              Retweet
-              <div>{tweet.retweets}</div>
-            </div>
-            <div className="flex items-center">
-              Share
-              {/* <Share className={iconGap} /> */}
-              {/* <div>{tweet.shares}</div> */}
-            </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

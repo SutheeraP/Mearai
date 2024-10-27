@@ -24,6 +24,7 @@ export const tweetRouter = createTRPCRouter({
                     retweets: input.retweets,
                     is_retweet: input.is_retweet,
                     is_reply: input.is_reply,
+                    userId: input.user_id,
                 },
             });
         }),
