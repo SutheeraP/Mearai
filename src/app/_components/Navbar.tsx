@@ -1,10 +1,11 @@
+
 import { UserButton } from '@clerk/nextjs'
 import React from 'react'
 import CreateTweet from './CreateTweet'
-import { currentUser } from '@clerk/nextjs/server'
+import getCurrentUser from '../function/currentUser'
 
 export default async function Navbar() {
-    const user = await currentUser()
+    const user = await getCurrentUser()
     const userButtonAppearance = {
         elements: {
             userButtonAvatarBox: "w-10 h-10", // Custom width and height
