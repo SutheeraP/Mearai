@@ -44,7 +44,7 @@ export default async function Tweet({ tweet }: Props) {
               {timeAgo.format(tweet.timestamp)}
             </p>
           </div>
-          <div>{tweet.text}</div>
+          <div className='break-all'>{tweet.text}</div>
         </div>
         {currentUser.id == postUser.id && <DeleteTweet tweetId={tweet.id} />}
       </div>
