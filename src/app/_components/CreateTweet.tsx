@@ -17,11 +17,7 @@ export default function CreateTweet({ userId }: Props) {
         createTweet.mutate({
             text: tweetTextVal,
             user_id: userId,
-            likes: 0,
-            retweets: 0,
             timestamp: new Date().toISOString(),
-            is_retweet: false,
-            is_reply: false,
         });
         router.push('/')
     };
@@ -37,7 +33,7 @@ export default function CreateTweet({ userId }: Props) {
                     placeholder="What's happening!?"
                     // onChange={handleInputChange}
                     // value={tweetText}
-                    className="border rounded-md p-2 w-full min-h-20 border-slate-200 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
+                    className="border rounded-md p-2 w-full min-h-20 border-slate-00 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
                 ></textarea>
                 <div className="flex">
                     <button

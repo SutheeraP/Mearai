@@ -2,12 +2,16 @@ import React from 'react'
 import { type Tweet } from '@prisma/client'
 import Image from 'next/image';
 
+// time format
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 TimeAgo.addDefaultLocale(en)
 
+// get user
 import { createClerkClient } from '@clerk/backend'
+import DeleteTweet from './DeleteTweet';
 const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
+import getCurrentUser from '../function/currentUser'
 
 type Props = {
   tweet: Tweet;
@@ -16,17 +20,22 @@ type Props = {
 export default async function Tweet({ tweet }: Props) {
   const timeAgo = new TimeAgo('en-US')
   const postUser = await clerkClient.users.getUser(tweet.userId)
+  const currentUser = await getCurrentUser()
+
+  if (!currentUser) { return; }
 
   return (
     <section
       key={tweet.id}
-      className="flex gap-2 px-4 py-3"
+      className="flex gap-4 px-4 py-3"
     >
-      <div className="flex items-start justify-center">
-        <Image src={postUser.imageUrl} alt='Profile Image' width={40} height={40} className="rounded-full aspect-square object-cover" />
+      <div className="relative w-12 h-12 aspect-square">
+        <Image
+          src={postUser.imageUrl}
+          alt='Profile Image' fill className="rounded-full object-cover" />
       </div>
 
-      <div className='flex flex-col gap-3'>
+      <div className='flex flex-col gap-3 w-full'>
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <h2 className="font-semibold">{postUser.username}</h2>
@@ -37,7 +46,7 @@ export default async function Tweet({ tweet }: Props) {
           </div>
           <div>{tweet.text}</div>
         </div>
-        <div className='text-slate-500 text-xs'>delete</div>
+        {currentUser.id == postUser.id && <DeleteTweet tweetId={tweet.id} />}
       </div>
     </section>
   )

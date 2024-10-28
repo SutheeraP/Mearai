@@ -1,7 +1,5 @@
-import { Tweets } from "~/app/_data/tweets";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { z } from "zod";
-import { tweetPayload } from "./interface";
+import { deletePayload, tweetPayload } from "./interface";
 
 
 export const tweetRouter = createTRPCRouter({
@@ -27,5 +25,12 @@ export const tweetRouter = createTRPCRouter({
                     userId: input.user_id,
                 },
             });
+        }),
+    deleteTweet: publicProcedure
+        .input(deletePayload)
+        .mutation(async ({ ctx, input }) => {
+            return ctx.db.tweet.delete({
+                where: { id: input.id },
+            })
         }),
 });
