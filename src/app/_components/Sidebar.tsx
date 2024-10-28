@@ -16,7 +16,7 @@ export default async function Sidebar() {
     return (
         <div className='flex flex-col gap-4 px-3 md:pr-0 text-sm md:text-base'>
             <div className='flex gap-4 items-center'>
-                <span><UserButton appearance={userButtonAppearance} /></span>
+            <UserButton appearance={userButtonAppearance} />
                 <span className='font-semibold leading-tight'> {user?.username}</span>
             </div>
             {user && <CreateTweet userId={user.id} />}

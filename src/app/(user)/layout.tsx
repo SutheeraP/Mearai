@@ -11,7 +11,7 @@ export default function Layout({ children }: PropsWithChildren) {
                 <div className="hidden md:grid md:col-span-3 pt-[60px]">
                     <Sidebar />
                 </div>
-                <div className="h-screen overflow-scroll md:grid md:col-span-6 pt-12">
+                <div className="h-screen overflow-scroll no-scrollbar md:grid md:col-span-6 pt-12">
                     {children}
                 </div>
                 <div className="hidden md:grid md:col-span-3 pt-[60px]">
