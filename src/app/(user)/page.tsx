@@ -11,9 +11,7 @@ export default async function Home() {
             <div className='flex flex-col border-x border-gray-800 md:border-slate-500 divide-y divide-slate-500'>
                 {
                     tweets.map((tweet) => (
-                        <>
-                            <Tweet tweet={tweet} key={tweet.id} />
-                        </>
+                        <Tweet tweet={tweet} key={tweet.id} />
                     ))
                 }
             </div>

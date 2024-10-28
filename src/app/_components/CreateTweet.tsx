@@ -33,7 +33,7 @@ export default function CreateTweet({ userId }: Props) {
                     placeholder="What's happening!?"
                     // onChange={handleInputChange}
                     // value={tweetText}
-                    className="border rounded-md p-2 w-full min-h-20 border-slate-00 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
+                    className="border rounded-md p-2 w-full min-h-20 border-slate-200 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
                 ></textarea>
                 <div className="flex">
                     <button

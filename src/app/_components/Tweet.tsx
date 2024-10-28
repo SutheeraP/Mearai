@@ -1,6 +1,7 @@
 import React from 'react'
 import { type Tweet } from '@prisma/client'
 import Image from 'next/image';
+import DeleteTweet from './DeleteTweet';
 
 // time format
 import TimeAgo from 'javascript-time-ago'
@@ -9,7 +10,6 @@ TimeAgo.addDefaultLocale(en)
 
 // get user
 import { createClerkClient } from '@clerk/backend'
-import DeleteTweet from './DeleteTweet';
 const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY })
 import getCurrentUser from '../function/currentUser'
 
@@ -27,7 +27,7 @@ export default async function Tweet({ tweet }: Props) {
   return (
     <section
       key={tweet.id}
-      className="flex gap-4 px-4 py-3"
+      className="flex gap-4 px-3 md:px-4 py-3 text-sm md:text-base"
     >
       <div className="relative w-12 h-12 aspect-square">
         <Image
