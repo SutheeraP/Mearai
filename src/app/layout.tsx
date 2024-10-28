@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <ClerkProvider afterSignOutUrl={'/sign-in'}>
       <TRPCReactProvider>
-        <html lang="en" className={`${inter.className} bg-gray-800`}>
+        <html lang="en" className={`${inter.className} bg-gray-800 text-white text-opacity-90 `}>
           <body>
             {children}
           </body>
