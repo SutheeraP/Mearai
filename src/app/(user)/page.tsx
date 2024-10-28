@@ -17,7 +17,6 @@ export default async function Home() {
             </div>
             <div className="md:hidden">
                 <ButtonTweet />
-                <div className='h-16'></div>
             </div>
         </>
     )

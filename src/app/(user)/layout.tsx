@@ -5,16 +5,16 @@ import Trend from "../_components/Trend";
 
 export default function Layout({ children }: PropsWithChildren) {
     return (
-        <div className="bg-gray-800 text-white text-opacity-90">
+        <div className="bg-gray-800 text-white text-opacity-90 relative">
             <Header />
-            <div className="flex gap-4 max-w-[1200px] mx-auto items-stretch">
-                <div className="overflow-hidden pt-3 hidden md:block w-[25%]">
+            <div className="md:grid md:grid-cols-12 justify-center gap-4 max-w-[1200px] w-full mx-auto overflow-hidden  h-screen">
+                <div className="hidden md:grid md:col-span-3 pt-[60px]">
                     <Navbar />
                 </div>
-                <div className="overflow-scroll w-full md:w-[45%]">
+                <div className="h-screen overflow-scroll md:grid md:col-span-6 pt-12">
                     {children}
                 </div>
-                <div className="pt-3 hidden w-full md:block md:w-[30%]">
+                <div className="hidden md:grid md:col-span-3 pt-[60px]">
                     <Trend />
                 </div>
             </div>
