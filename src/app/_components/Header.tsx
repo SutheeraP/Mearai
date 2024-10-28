@@ -11,7 +11,6 @@ export default function Header() {
                     <UserButton />
                 </div>
             </div>
-            {/* <div className='h-12'></div> */}
         </>
     )
 }
