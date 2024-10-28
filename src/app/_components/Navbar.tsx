@@ -14,14 +14,13 @@ export default async function Navbar() {
         },
     }
     return (
-        <div className='flex flex-col gap-4 px-3'>
+        <div className='flex flex-col gap-4 pl-3'>
             <div className='flex gap-4 items-center'>
                 <span><UserButton appearance={userButtonAppearance} /></span>
-                <span className='font-medium leading-tight'> {user?.username}</span>
+                <span className='font-semibold leading-tight'> {user?.username}</span>
             </div>
             {user && <CreateTweet userId={user.id} />}
             <div className='text-sm text-slate-500'>
-                <div>Click the profile to <span className='italic'>edit profile</span>  or <span className='italic'>log out</span></div>
                 <div>Refresh page to see latest tweet</div>
             </div>
         </div >

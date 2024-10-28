@@ -19,6 +19,7 @@ export default async function Home() {
             </div>
             <div className="md:hidden">
                 <MobileTweet />
+                <div className='h-16'></div>
             </div>
         </>
     )
