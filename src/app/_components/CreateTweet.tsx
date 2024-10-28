@@ -55,7 +55,7 @@ export default function CreateTweet({ userId }: Props) {
                     placeholder="What's happening!?"
                     onChange={(e) => { setTweetText(e.target.value) }}
                     value={tweetText}
-                    className="border rounded-md p-2 w-full min-h-28 border-slate-200 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
+                    className="text-[16px] border rounded-md p-2 w-full min-h-28 border-slate-200 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
                 ></textarea>
                 <div className="flex">
                     <button
