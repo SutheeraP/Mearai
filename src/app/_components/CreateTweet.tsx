@@ -2,6 +2,7 @@
 
 import { api } from '~/trpc/react';
 import { useRouter } from 'next/navigation'
+import { useState } from 'react';
 
 type Props = {
     userId: string;
@@ -9,12 +10,16 @@ type Props = {
 
 export default function CreateTweet({ userId }: Props) {
     const router = useRouter()
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [tweetText, setTweetText] = useState('')
 
     const createTweet = api.tweet.createTweet.useMutation({
         onSuccess: async data => {
             console.log('Create tweet successfully:', data);
             router.push('/')
             router.refresh()
+            setIsSubmitting(false)
+            setTweetText('')
         },
         onError: error => {
             console.error('Error creating tweet:', error.message);
@@ -24,7 +29,14 @@ export default function CreateTweet({ userId }: Props) {
     })
 
     const handleSubmit = (formData: FormData) => {
+        setIsSubmitting(true)
         const tweetTextVal = formData.get("tweetText") as string;
+
+        if (!tweetTextVal.length) {
+            setIsSubmitting(false)
+            return alert('Type something 🫵')
+        }
+
         createTweet.mutate({
             text: tweetTextVal,
             user_id: userId,
@@ -41,25 +53,20 @@ export default function CreateTweet({ userId }: Props) {
                 <textarea
                     name="tweetText"
                     placeholder="What's happening!?"
-                    // onChange={handleInputChange}
-                    // value={tweetText}
-                    className="border rounded-md p-2 w-full min-h-20 border-slate-200 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
+                    onChange={(e) => { setTweetText(e.target.value) }}
+                    value={tweetText}
+                    className="border rounded-md p-2 w-full min-h-28 border-slate-200 border-opacity-50 bg-transparent placeholder:text-slate-500 focus:outline-none"
                 ></textarea>
                 <div className="flex">
                     <button
                         type="submit"
-                        className='w-full py-2 rounded-md bg-slate-100 text-gray-800 font-semibold'
-                    // disabled={!submitEnabled}
-                    // className={`h-max w-max rounded ${submitEnabled
-                    //     ? "cursor-pointer bg-blue-400"
-                    //     : "cursor-not-allowed bg-gray-400"
-                    //     } px-4 py-2 font-bold text-white`}
+                        disabled={isSubmitting}
+                        className={`${isSubmitting ? 'animate-pulse' : ''} w-full py-2 rounded-md bg-slate-100 text-gray-800 font-semibold`}
                     >
-                        Tweet
+                        {isSubmitting ? 'Tweeting...' : 'Tweet'}
                     </button>
                 </div>
             </form>
-
         </div>
     )
 }

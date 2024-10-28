@@ -4,7 +4,7 @@ import React from 'react'
 import CreateTweet from './CreateTweet'
 import getCurrentUser from '../function/currentUser'
 
-export default async function Navbar() {
+export default async function Sidebar() {
     const user = await getCurrentUser()
     const userButtonAppearance = {
         elements: {
@@ -20,9 +20,6 @@ export default async function Navbar() {
                 <span className='font-semibold leading-tight'> {user?.username}</span>
             </div>
             {user && <CreateTweet userId={user.id} />}
-            <div className='text-sm text-slate-500'>
-                <div>Refresh page to see latest tweet</div>
-            </div>
         </div >
     )
 }
