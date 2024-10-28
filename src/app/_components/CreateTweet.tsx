@@ -8,9 +8,20 @@ type Props = {
 };
 
 export default function CreateTweet({ userId }: Props) {
-    const createTweet = api.tweet.createTweet.useMutation({})
-
     const router = useRouter()
+
+    const createTweet = api.tweet.createTweet.useMutation({
+        onSuccess: async data => {
+            console.log('Create tweet successfully:', data);
+            router.push('/')
+            router.refresh()
+        },
+        onError: error => {
+            console.error('Error creating tweet:', error.message);
+            alert(`Error creating tweet: ${String(error)}`);
+            throw Error(String(error));
+        },
+    })
 
     const handleSubmit = (formData: FormData) => {
         const tweetTextVal = formData.get("tweetText") as string;
@@ -19,7 +30,6 @@ export default function CreateTweet({ userId }: Props) {
             user_id: userId,
             timestamp: new Date().toISOString(),
         });
-        router.push('/')
     };
 
     return (
