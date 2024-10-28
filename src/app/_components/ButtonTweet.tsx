@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function MobileTweet() {
+export default function ButtonTweet() {
 
     return (
         <>

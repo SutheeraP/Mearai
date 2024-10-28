@@ -1,7 +1,7 @@
 import React from 'react'
 import { api } from "~/trpc/server";
 import Tweet from '~/app/_components/Tweet';
-import MobileTweet from '../_components/MobileTweet';
+import ButtonTweet from '../_components/ButtonTweet';
 
 export default async function Home() {
     const tweets = await api.tweet.getAllTweets()
@@ -16,7 +16,7 @@ export default async function Home() {
                 }
             </div>
             <div className="md:hidden">
-                <MobileTweet />
+                <ButtonTweet />
                 <div className='h-16'></div>
             </div>
         </>

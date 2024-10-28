@@ -14,7 +14,7 @@ export default async function Navbar() {
         },
     }
     return (
-        <div className='flex flex-col gap-4 pl-3'>
+        <div className='flex flex-col gap-4 px-3 md:pr-0 text-sm md:text-base'>
             <div className='flex gap-4 items-center'>
                 <span><UserButton appearance={userButtonAppearance} /></span>
                 <span className='font-semibold leading-tight'> {user?.username}</span>

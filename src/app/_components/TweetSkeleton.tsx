@@ -17,9 +17,6 @@ export default function TweetSkeleton() {
                         <div className="h-4 bg-gray-500 rounded w-full"></div>
                     </div>
                 </div>
-                {/* <div>
-                    <div className="h-4 bg-gray-500 rounded w-1/4"></div>
-                </div> */}
             </div>
         </section>
     )

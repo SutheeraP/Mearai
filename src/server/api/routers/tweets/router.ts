@@ -18,10 +18,6 @@ export const tweetRouter = createTRPCRouter({
                 data: {
                     text: input.text,
                     timestamp: input.timestamp,
-                    likes: input.likes,
-                    retweets: input.retweets,
-                    is_retweet: input.is_retweet,
-                    is_reply: input.is_reply,
                     userId: input.user_id,
                 },
             });
