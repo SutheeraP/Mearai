@@ -6,7 +6,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { ClerkProvider } from '@clerk/nextjs';
 
 export const metadata: Metadata = {
-  title: "Twitraii",
+  title: "Mearai",
   description: "T3-Learning project by cloning twitter app",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
