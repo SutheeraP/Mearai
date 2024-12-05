@@ -1,12 +1,12 @@
 import * as React from "react";
-export default function Brand(props) {
+export default function Brand() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={100}
       height={21}
       fill="none"
-      {...props}
+      // {...props}
     >
       <path
         fill="#F6EFF1"
