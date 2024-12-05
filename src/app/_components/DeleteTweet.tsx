@@ -32,6 +32,6 @@ export default function DeleteTweet({ tweetId }: Props) {
     };
 
     return (
-        <div onClick={handleDelete} className='cursor-pointer text-slate-500 text-xs w-fit'>Delete</div>
+        <div onClick={handleDelete} className='cursor-pointer text-main text-xs w-fit'>Delete</div>
     )
 }

@@ -1,16 +1,19 @@
-import React from 'react'
-import { UserButton } from '@clerk/nextjs'
-import Link from 'next/link'
+import React from "react";
+import { UserButton } from "@clerk/nextjs";
+import Link from "next/link";
+import Brand from "./svg/Brand";
 
 export default function Header() {
-    return (
-        <>
-            <div className='fixed z-10 w-full flex justify-center text-slate-400 font-medium border-b border-slate-500 bg-gray-800 bg-opacity-80 backdrop-blur-sm'>
-                <div className='h-12 max-w-[1200px] w-full flex items-center justify-between px-3'>
-                    <Link href={'/'} className='tracking-wide font-medium'>Twitraii</Link>
-                    <UserButton />
-                </div>
-            </div>
-        </>
-    )
+  return (
+    <>
+      <div className="text-primary fixed z-10 flex w-full justify-center border-b border-slate-500 bg-dark bg-opacity-80 font-medium backdrop-blur-sm">
+        <div className="flex h-12 w-full max-w-[1200px] items-center justify-between px-3">
+          <Link href={"/"} className="font-medium tracking-wide">
+            <Brand />
+          </Link>
+          <UserButton />
+        </div>
+      </div>
+    </>
+  );
 }
