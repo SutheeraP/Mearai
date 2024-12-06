@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     }
     else if (type === AllowClerkWebhooks.USER_UPDATED) {
       // Extract user data
-      const { id, username, first_name, email_addresses, image_url } = data;
+      const { id, username, first_name, email_addresses, image_url, primary_email_address_id } = data;
 
       // validate data
       let userName = "";
