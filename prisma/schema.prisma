@@ -36,7 +36,8 @@ model Tweet {
 
 model User {
     id        String   @id @default(cuid())
+    clerkId   String
     username  String
     email     String
-    displayName String
+    photo     String
 }

@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     if (type === AllowClerkWebhooks.USER_CREATED) {
       // Extract user data
-      const { id, username, first_name, email_addresses, primary_email_address_id } = data;
+      const { id, username, first_name, email_addresses, primary_email_address_id, image_url } = data;
       let userName = "";
       if (username) {
         userName = username;
@@ -54,7 +54,8 @@ export async function POST(req: NextRequest) {
         data: {
           username: userName,
           email: emailAddress,
-          displayName: userName,
+          photo: image_url,
+          clerlId: id
         },
       });
     }
