@@ -5,6 +5,7 @@ import { Webhook } from 'svix';
 const env = process.env;
 
 const verifyClerkPayload = async (req: Request) => {
+  console.log('in verify clerk payload')
   const svixId = req.headers.get("svix-id");
   const svixTimestamp = req.headers.get("svix-timestamp");
   const svixSignature = req.headers.get("svix-signature");
@@ -34,35 +35,35 @@ export async function POST(req: NextRequest) {
     const { data, type } = await verifyClerkPayload(req);
 
     if (type === AllowClerkWebhooks.USER_CREATED) {
+
       // Extract user data
       const { id, username, first_name, email_addresses, primary_email_address_id, image_url } = data;
       let userName = "";
+
+      // clerk testing have firstname but username is null
       if (username) {
         userName = username;
       } else {
         userName = first_name ?? '';
       }
       const email = email_addresses.find((e) => e.id === primary_email_address_id);
-      if (!email) {
-        throw new Error("No primary email address");
-      }
-      const emailAddress = email?.email_address;
+      const emailAddress = email?.email_address ?? null;
 
       // Connect data to your database
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       await db.user.create({
         data: {
+          clerkId: id,
           username: userName,
           email: emailAddress,
           photo: image_url,
-          clerkId: id
         },
       });
     }
 
     return NextResponse.json({ message: "Ok" });
   } catch (err) {
-    console.log(err);
+    console.error("Error processing webhook:", err);
     return NextResponse.json(err);
   }
 }
