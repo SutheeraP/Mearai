@@ -5,7 +5,6 @@ import { Webhook } from 'svix';
 const env = process.env;
 
 const verifyClerkPayload = async (req: Request) => {
-  console.log('in verify clerk payload')
   const svixId = req.headers.get("svix-id");
   const svixTimestamp = req.headers.get("svix-timestamp");
   const svixSignature = req.headers.get("svix-signature");
@@ -38,9 +37,9 @@ export async function POST(req: NextRequest) {
 
       // Extract user data
       const { id, username, first_name, email_addresses, primary_email_address_id, image_url } = data;
-      let userName = "";
 
       // clerk testing have firstname but username is null
+      let userName = "";
       if (username) {
         userName = username;
       } else {
@@ -60,10 +59,44 @@ export async function POST(req: NextRequest) {
         },
       });
     }
+    else if (type === AllowClerkWebhooks.USER_UPDATED) {
+      // Extract user data
+      const { id, username, first_name, email_addresses, image_url } = data;
+
+      // validate data
+      let userName = "";
+      if (username) {
+        userName = username;
+      } else {
+        userName = first_name ?? '';
+      }
+      const email = email_addresses.find((e) => e.id === primary_email_address_id);
+      const emailAddress = email?.email_address ?? null;
+
+      await db.user.update({
+        where: {
+          clerkId: id,
+        },
+        data: {
+          username: userName,
+          email: emailAddress,
+          photo: image_url,
+        },
+      });
+    }
+    else if (type === AllowClerkWebhooks.USER_DELETED) {
+      // Extract user data
+      const { id } = data;
+
+      await db.user.delete({
+        where: {
+          clerkId: id,
+        }
+      });
+    }
 
     return NextResponse.json({ message: "Ok" });
   } catch (err) {
-    console.error("Error processing webhook:", err);
     return NextResponse.json(err);
   }
 }
