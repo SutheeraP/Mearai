@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
           username: userName,
           email: emailAddress,
           photo: image_url,
-          clerlId: id
+          clerkId: id
         },
       });
     }
