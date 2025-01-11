@@ -4,8 +4,9 @@ import { SignUp } from "@clerk/nextjs";
 
 export default function page() {
     return (
-        <div className="">
-            <SignUp fallbackRedirectUrl={"/"} signInUrl='/sign-in' />
+        <div>
+            <SignUp fallbackRedirectUrl={process.env.CLERK_SIGN_UP_FALLBACK_REDIRECT_URL} 
+            signInUrl={process.env.CLERK_SIGN_IN_URL} />
         </div>
     );
 }

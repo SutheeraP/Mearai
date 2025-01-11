@@ -16,7 +16,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider afterSignOutUrl={'/sign-in'}>
+    <ClerkProvider afterSignOutUrl={process.env.CLERK_SIGN_UP_FORCE_REDIRECT_URL}>
       <TRPCReactProvider>
         <html lang="en" className={`${inter.className} bg-dark text-light text-opacity-90 `}>
           <body>
