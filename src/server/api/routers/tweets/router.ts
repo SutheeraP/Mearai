@@ -5,7 +5,8 @@ import { deletePayload, tweetPayload } from "./interface";
 export const tweetRouter = createTRPCRouter({
     getAllTweets: publicProcedure.query(async ({ ctx }) => {
         return ctx.db.tweet.findMany({
-            orderBy: { timestamp: "desc" }
+            include: { user: true }, // Include the related user object
+            orderBy: { timestamp: "desc" },
         })
     })
     ,

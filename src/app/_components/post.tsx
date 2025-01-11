@@ -1,5 +1,8 @@
 "use client";
 
+// next js defualt
+// didn't use now
+
 import { useState } from "react";
 
 export function LatestPost() {
