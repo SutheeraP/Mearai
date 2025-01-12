@@ -1,7 +1,7 @@
 import React from "react";
 import { api } from "~/trpc/server";
 import Tweet from "~/app/_components/Tweet";
-import ButtonTweet from "../_components/ButtonTweet";
+import Navbar from "../_components/Navbar";
 
 export default async function Home() {
   const tweets = await api.tweet.getAllTweets();
@@ -14,7 +14,7 @@ export default async function Home() {
         ))}
       </div>
       <div className="md:hidden">
-        <ButtonTweet />
+        <Navbar />
       </div>
     </>
   );
