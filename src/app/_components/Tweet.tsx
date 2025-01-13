@@ -13,6 +13,7 @@ import getCurrentUser from "../function/currentUser";
 import EditIcon from "./svg/EditIcon";
 import HeartIcon from "./svg/HeartIcon";
 import HeartFillIcon from "./svg/HeartFillIcon";
+import EditTweet from "./EditTweet";
 
 export default async function Tweet({
   id,
@@ -62,10 +63,10 @@ export default async function Tweet({
             </div>
             1{/* <HeartFillIcon/> */}
           </div>
-          <div className="flex items-center gap-3 text-main">
+          <div className="flex items-center gap-3">
             {currentUser.id == userId && (
               <>
-                <EditIcon />
+                <EditTweet tweetId={id} tweetText={text} />
                 <DeleteTweet tweetId={id} />
               </>
             )}

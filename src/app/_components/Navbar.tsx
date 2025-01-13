@@ -17,6 +17,7 @@ export default function Navbar() {
           onClose={() => {
             setShowModal(!showModal);
           }}
+          mode="create"
         />
       )}
       {/* md */}

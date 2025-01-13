@@ -3,22 +3,52 @@ import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ModalTweetProps {
   onClose: () => void;
+  mode: "create" | "edit";
+  tweetId?: number;
+  tweetOriginal?: string;
 }
 
-export default function ModalTweet({ onClose }: ModalTweetProps) {
+export default function ModalTweet({
+  onClose,
+  mode,
+  tweetId,
+  tweetOriginal,
+}: ModalTweetProps) {
   const { isLoaded, isSignedIn, user } = useUser();
   // console.log(user);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tweetText, setTweetText] = useState("");
 
+  useEffect(() => {
+    if (mode == "edit") {
+      setTweetText(tweetOriginal);
+    }
+  }, []);
+
   if (!isLoaded || !isSignedIn) {
     return null;
   }
+
+  const updateTweet = api.tweet.updateTweet.useMutation({
+    onSuccess: async (data) => {
+      console.log("Update tweet successfully:", data);
+      router.push("/");
+      router.refresh();
+      setIsSubmitting(false);
+      setTweetText("");
+      onClose();
+    },
+    onError: (error) => {
+      console.error("Error update tweet:", error.message);
+      alert(`Error update tweet: ${String(error)}`);
+      throw Error(String(error));
+    },
+  });
 
   const createTweet = api.tweet.createTweet.useMutation({
     onSuccess: async (data) => {
@@ -45,17 +75,25 @@ export default function ModalTweet({ onClose }: ModalTweetProps) {
       return alert("Type something 🫵");
     }
 
-    createTweet.mutate({
-      text: tweetTextVal,
-      user_id: user.id,
-      timestamp: new Date().toISOString(),
-    });
+    // check mode then mutate
+    if (mode == "create") {
+      createTweet.mutate({
+        text: tweetTextVal,
+        user_id: user.id,
+        timestamp: new Date().toISOString(),
+      });
+    } else if (mode == "edit") {
+      updateTweet.mutate({
+        text: tweetTextVal,
+        id: tweetId,
+      });
+    }
   };
 
   return (
     <form
       action={handleSubmit}
-      className="absolute top-0 z-10 h-full w-screen md:bg-main md:bg-opacity-10 md:backdrop-blur-sm"
+      className="absolute left-0 top-0 z-10 h-full w-screen md:bg-main md:bg-opacity-10 md:backdrop-blur-sm"
     >
       <div className="mx-auto h-full bg-dark px-4 md:mt-12 md:h-fit md:w-[500px] md:rounded-md">
         {/* top */}

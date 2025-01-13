@@ -7,6 +7,11 @@ export const tweetPayload = z.object({
     timestamp: z.string(),
 })
 
+export const updatePayload = z.object({
+    id: z.number(),
+    text: z.string(),
+})
+
 export const deletePayload = z.object({
     id: z.number(),
 })

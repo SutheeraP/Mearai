@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { deletePayload, tweetPayload } from "./interface";
+import { deletePayload, tweetPayload, updatePayload } from "./interface";
 
 
 export const tweetRouter = createTRPCRouter({
@@ -13,13 +13,22 @@ export const tweetRouter = createTRPCRouter({
     createTweet: publicProcedure
         .input(tweetPayload)
         .mutation(async ({ ctx, input }) => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
 
             return ctx.db.tweet.create({
                 data: {
                     text: input.text,
                     timestamp: input.timestamp,
                     userId: input.user_id,
+                },
+            });
+        }),
+    updateTweet: publicProcedure
+        .input(updatePayload)
+        .mutation(async ({ ctx, input }) => {
+            return ctx.db.tweet.update({
+                where: { id: input.id },
+                data: {
+                    text: input.text,
                 },
             });
         }),
