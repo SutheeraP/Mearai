@@ -10,6 +10,9 @@ TimeAgo.addDefaultLocale(en);
 
 // get current user
 import getCurrentUser from "../function/currentUser";
+import EditIcon from "./svg/EditIcon";
+import HeartIcon from "./svg/HeartIcon";
+import HeartFillIcon from "./svg/HeartFillIcon";
 
 export default async function Tweet({
   id,
@@ -51,7 +54,23 @@ export default async function Tweet({
           </div>
           <div className="break-all">{text}</div>
         </div>
-        {currentUser.id == userId && <DeleteTweet tweetId={id} />}
+        {/* like and edit */}
+        <div className="flex justify-between">
+          <div className="flex items-center justify-center gap-2">
+            <div className="cursor-pointer">
+              <HeartIcon />
+            </div>
+            1{/* <HeartFillIcon/> */}
+          </div>
+          <div className="flex items-center gap-3 text-main">
+            {currentUser.id == userId && (
+              <>
+                <EditIcon />
+                <DeleteTweet tweetId={id} />
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );
