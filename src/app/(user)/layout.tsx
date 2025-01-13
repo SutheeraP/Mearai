@@ -4,20 +4,20 @@ import Header from "../_components/Header";
 import Trend from "../_components/Trend";
 
 export default function Layout({ children }: PropsWithChildren) {
-    return (
-        <div className="relative">
-            <Header />
-            <div className="md:grid md:grid-cols-12 justify-center gap-4 max-w-[1200px] w-full mx-auto overflow-hidden  h-screen">
-                <div className="hidden md:grid md:col-span-3 pt-[60px]">
-                    <Navbar />
-                </div>
-                <div className="h-screen overflow-scroll no-scrollbar md:grid md:col-span-6 pt-12">
-                    {children}
-                </div>
-                <div className="hidden md:grid md:col-span-3 pt-[60px]">
-                    <Trend />
-                </div>
-            </div>
+  return (
+    <div className="relative">
+      <Header />
+      <div className="relative mx-auto h-dvh w-full max-w-[1200px] justify-center gap-4 overflow-hidden md:grid md:grid-cols-12">
+        <div className="hidden pt-[60px] md:col-span-3 md:grid">
+          <Navbar />
         </div>
-    );
+        <div className="no-scrollbar h-dvh overflow-scroll pt-12 md:col-span-6 md:grid">
+          {children}
+        </div>
+        <div className="hidden pt-[60px] md:col-span-3 md:grid">
+          <Trend />
+        </div>
+      </div>
+    </div>
+  );
 }
