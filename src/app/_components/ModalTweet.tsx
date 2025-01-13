@@ -25,7 +25,7 @@ export default function ModalTweet({
   const [tweetText, setTweetText] = useState("");
 
   useEffect(() => {
-    if (mode == "edit") {
+    if (mode == "edit" && tweetOriginal) {
       setTweetText(tweetOriginal);
     }
   }, []);
@@ -82,7 +82,7 @@ export default function ModalTweet({
         user_id: user.id,
         timestamp: new Date().toISOString(),
       });
-    } else if (mode == "edit") {
+    } else if (mode == "edit" && tweetId) {
       updateTweet.mutate({
         text: tweetTextVal,
         id: tweetId,

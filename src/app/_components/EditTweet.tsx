@@ -6,7 +6,7 @@ import EditIcon from "./svg/EditIcon";
 
 type Props = {
   tweetId: number;
-  tweetText: number;
+  tweetText: string;
 };
 
 export default function EditTweet({ tweetId, tweetText }: Props) {
