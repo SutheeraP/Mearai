@@ -30,7 +30,7 @@ model User {
     clerkId   String   @unique
     username  String   @unique
     email     String?  @unique
-    photo     String?
+    photo     String
     tweets    Tweet[]
 }
 

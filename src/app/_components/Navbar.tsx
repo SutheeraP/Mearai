@@ -6,10 +6,8 @@ import ModalTweet from "./ModalTweet";
 import SearchIcon from "./svg/SearchIcon";
 import ProfileIcon from "./svg/ProfileIcon";
 import { useState } from "react";
-import getCurrentUser from "../function/currentUser";
 
 export default function Navbar() {
-  // const currentUser = getCurrentUser();
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -35,7 +33,6 @@ export default function Navbar() {
         >
           Post
         </div>
-        {/* {user && <CreateTweet userId={user.id} />} */}
       </div>
 
       {/* mobile */}
