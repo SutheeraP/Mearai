@@ -63,7 +63,7 @@ export default async function Tweet({
             </div>
             1{/* <HeartFillIcon/> */}
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {currentUser.id == userId && (
               <>
                 <EditTweet tweetId={id} tweetText={text} />

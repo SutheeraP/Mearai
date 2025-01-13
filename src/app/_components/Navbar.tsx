@@ -51,7 +51,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 place-items-center border-t border-slate-500 bg-dark bg-opacity-80 py-6 backdrop-blur-sm">
+          <div className="grid grid-cols-3 place-items-center border-t border-slate-500 bg-dark bg-opacity-80 py-5 backdrop-blur-sm">
             <NavItem icon={HomeIcon} label="Home" />
             <NavItem icon={SearchIcon} label="Search" />
             <NavItem icon={ProfileIcon} label="Profile" />

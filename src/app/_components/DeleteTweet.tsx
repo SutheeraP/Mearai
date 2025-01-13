@@ -25,7 +25,7 @@ export default function DeleteTweet({ tweetId }: Props) {
   });
 
   const handleDelete = () => {
-    if (confirm("Are you sure?")) {
+    if (confirm("Delete jing na?")) {
       deleteTweet.mutate({
         id: tweetId,
       });
