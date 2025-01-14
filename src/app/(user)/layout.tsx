@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from "react";
-import Navbar from "../_components/Navbar";
-import Header from "../_components/Header";
-import Trend from "../_components/Trend";
+import Navbar from "~/app/_components/layout/Navbar";
+import Header from "~/app/_components/layout/Header";
+import Trend from "~/app/_components/layout/Trend";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (

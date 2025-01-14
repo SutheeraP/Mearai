@@ -3,7 +3,7 @@
 import { api } from "~/trpc/react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import BinIcon from "./svg/BinIcon";
+import BinIcon from "~/app/_components/svg/BinIcon";
 
 type Props = {
   tweetId: number;

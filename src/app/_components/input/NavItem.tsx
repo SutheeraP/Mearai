@@ -1,7 +1,7 @@
 import React from "react";
 
 interface NavItemProps {
-  icon: React.FC<{ size?: number, color?: string }>;
+  icon: React.FC<{ size?: number; color?: string }>;
   label: string;
 }
 

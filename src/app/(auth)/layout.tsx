@@ -1,5 +1,5 @@
 import { type PropsWithChildren } from "react";
-import Brand from "../_components/svg/Brand";
+import Brand from "~/app/_components/svg/Brand";
 
 export default function SignUpSignInLayout({ children }: PropsWithChildren) {
   return (

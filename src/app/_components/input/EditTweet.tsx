@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import ModalTweet from "./ModalTweet";
-import EditIcon from "./svg/EditIcon";
+import ModalTweet from "~/app/_components/input/ModalTweet";
+import EditIcon from "~/app/_components/svg/EditIcon";
 
 type Props = {
   tweetId: number;

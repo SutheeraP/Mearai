@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import DeleteTweet from "./DeleteTweet";
-import { type Tweet } from "../type";
+import DeleteTweet from "~/app/_components/input/DeleteTweet";
+import { type Tweet } from "~/app/type";
 
 // time format
 import TimeAgo from "javascript-time-ago";
@@ -9,11 +9,11 @@ import en from "javascript-time-ago/locale/en";
 TimeAgo.addDefaultLocale(en);
 
 // get current user
-import getCurrentUser from "../function/currentUser";
-import EditIcon from "./svg/EditIcon";
-import HeartIcon from "./svg/HeartIcon";
-import HeartFillIcon from "./svg/HeartFillIcon";
-import EditTweet from "./EditTweet";
+import getCurrentUser from "~/app/function/currentUser";
+// import EditIcon from "./svg/EditIcon";
+import HeartIcon from "~/app/_components/svg/HeartIcon";
+// import HeartFillIcon from "./svg/HeartFillIcon";
+import EditTweet from "~/app/_components/input/EditTweet";
 
 export default async function Tweet({
   id,

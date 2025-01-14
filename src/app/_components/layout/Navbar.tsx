@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import HomeIcon from "./svg/HomeIcon";
-import NavItem from "./NavItem";
-import ModalTweet from "./ModalTweet";
-import SearchIcon from "./svg/SearchIcon";
-import ProfileIcon from "./svg/ProfileIcon";
+import HomeIcon from "~/app/_components/svg/HomeIcon";
+import NavItem from "~/app/_components/input/NavItem";
+import ModalTweet from "~/app/_components/input/ModalTweet";
+import SearchIcon from "~/app/_components/svg/SearchIcon";
+import ProfileIcon from "~/app/_components/svg/ProfileIcon";
 import { useState } from "react";
 
 export default function Navbar() {

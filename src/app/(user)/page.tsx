@@ -1,7 +1,7 @@
 import React from "react";
 import { api } from "~/trpc/server";
-import Tweet from "~/app/_components/Tweet";
-import Navbar from "../_components/Navbar";
+import Tweet from "~/app/_components/layout/Tweet";
+import Navbar from "~/app/_components/layout/Navbar";
 
 export default async function Home() {
   const tweets = await api.tweet.getAllTweets();

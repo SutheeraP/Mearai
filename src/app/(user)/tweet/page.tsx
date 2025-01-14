@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import Navbar from "~/app/_components/Navbar";
+import Navbar from "~/app/_components/layout/Navbar";
 
 export default function page() {
   return (

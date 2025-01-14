@@ -109,7 +109,7 @@ export default function ModalTweet({
               disabled={isSubmitting}
               className={`${isSubmitting ? "animate-pulse" : ""} cursor-pointer rounded-md bg-main px-6 py-1 font-semibold text-dark`}
             >
-              Post
+              {mode == "create" ? "Post" : "Save"}
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import Brand from "./svg/Brand";
+import Brand from "~/app/_components/svg/Brand";
 
 export default function Header() {
   return (
