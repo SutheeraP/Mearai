@@ -5,6 +5,7 @@ import Navbar from "~/app/_components/layout/Navbar";
 
 export default async function Home() {
   const tweets = await api.tweet.getAllTweets();
+  console.log(tweets);
 
   return (
     <>
@@ -17,6 +18,8 @@ export default async function Home() {
             userId={tweet.user.clerkId}
             username={tweet.user.username}
             userPhoto={tweet.user.photo}
+            likes={20}
+            isLiked={false}
             key={tweet.id}
           />
         ))}

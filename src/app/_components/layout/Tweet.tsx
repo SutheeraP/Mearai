@@ -14,6 +14,7 @@ import getCurrentUser from "~/app/function/currentUser";
 import HeartIcon from "~/app/_components/svg/HeartIcon";
 // import HeartFillIcon from "./svg/HeartFillIcon";
 import EditTweet from "~/app/_components/input/EditTweet";
+import LikeTweet from "~/app/_components/input/LikeTweet";
 
 export default async function Tweet({
   id,
@@ -22,6 +23,8 @@ export default async function Tweet({
   userId,
   username,
   userPhoto,
+  likes,
+  isLiked,
 }: Tweet) {
   // console.log(tweet.user.username)
   const timeAgo = new TimeAgo("en-US");
@@ -57,12 +60,12 @@ export default async function Tweet({
         </div>
         {/* like and edit */}
         <div className="flex justify-between">
-          <div className="flex items-center justify-center gap-2">
-            <div className="cursor-pointer">
-              <HeartIcon />
-            </div>
-            1{/* <HeartFillIcon/> */}
-          </div>
+          <LikeTweet
+            tweetId={id}
+            userId={userId}
+            isLiked={isLiked}
+            likes={likes}
+          />
           <div className="flex items-center gap-4">
             {currentUser.id == userId && (
               <>

@@ -15,3 +15,8 @@ export const updatePayload = z.object({
 export const deletePayload = z.object({
     id: z.number(),
 })
+
+export const likePayload = z.object({
+    tweetId: z.number(),
+    userId: z.string(),
+})

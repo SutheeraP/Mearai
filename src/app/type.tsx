@@ -5,4 +5,6 @@ export type Tweet = {
   userId: string;
   username: string;
   userPhoto: string;
+  likes: number;
+  isLiked: boolean;
 };
