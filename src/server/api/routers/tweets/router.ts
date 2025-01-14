@@ -1,9 +1,30 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { deletePayload, tweetPayload, updatePayload, likePayload } from "./interface";
+import { PrismaClient, User } from "@prisma/client";
 
 
 export const tweetRouter = createTRPCRouter({
     getAllTweets: publicProcedure.query(async ({ ctx }) => {
+        // const data = ctx.db.tweet.findMany({
+        //     include: { user: true, tweetLikes: true }, // Include the related user object
+        //     orderBy: { timestamp: "desc" },
+        // })
+
+        // const prisma = new PrismaClient().$extends({
+        //     result: {
+        //         tweet: {
+        //             amountLikes: {
+        //                 // the dependencies
+        //                 needs: { tweetLikes: true },
+        //                 compute(tweet) {
+        //                     // the computation logic
+        //                     return tweet.tweetLikes.length
+        //                 },
+        //             },
+        //         },
+        //     },
+        // })
+
         return ctx.db.tweet.findMany({
             include: { user: true, tweetLikes: true }, // Include the related user object
             orderBy: { timestamp: "desc" },

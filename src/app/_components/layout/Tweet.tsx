@@ -10,9 +10,6 @@ TimeAgo.addDefaultLocale(en);
 
 // get current user
 import getCurrentUser from "~/app/function/currentUser";
-// import EditIcon from "./svg/EditIcon";
-import HeartIcon from "~/app/_components/svg/HeartIcon";
-// import HeartFillIcon from "./svg/HeartFillIcon";
 import EditTweet from "~/app/_components/input/EditTweet";
 import LikeTweet from "~/app/_components/input/LikeTweet";
 

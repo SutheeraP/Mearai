@@ -2,10 +2,17 @@ import React from "react";
 import { api } from "~/trpc/server";
 import Tweet from "~/app/_components/layout/Tweet";
 import Navbar from "~/app/_components/layout/Navbar";
+import getCurrentUser from "~/app/function/currentUser";
 
 export default async function Home() {
   const tweets = await api.tweet.getAllTweets();
   console.log(tweets);
+
+  // check auth to show like
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return;
+  }
 
   return (
     <>
@@ -18,8 +25,8 @@ export default async function Home() {
             userId={tweet.user.clerkId}
             username={tweet.user.username}
             userPhoto={tweet.user.photo}
-            likes={20}
-            isLiked={false}
+            likes={tweet.tweetLikes.length}
+            isLiked={tweet.tweetLikes.some((user) => user.userId == currentUser.id)}
             key={tweet.id}
           />
         ))}
