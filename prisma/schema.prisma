@@ -49,11 +49,11 @@ model Tweet {
 }
 
 model TweetLikes {
-  id     Int   @id @default(autoincrement())
-  tweet   Tweet? @relation(fields: [tweetId], references: [id])
-  tweetId Int?
-  user    User?  @relation(fields: [userId], references: [clerkId])
-  userId  String?
+  id        Int     @id @default(autoincrement())
+  tweet     Tweet?  @relation(fields: [tweetId], references: [id])
+  tweetId   Int?
+  user      User?   @relation(fields: [userId], references: [clerkId])
+  userId    String?
   timestamp  DateTime @default(now())
 
   @@index([tweetId])

@@ -32,6 +32,18 @@ export default function LikeTweet({
     },
   });
 
+  const unLike = api.tweet.unLikeTweet.useMutation({
+    onSuccess: async (data) => {
+      console.log("like tweet successfully", data);
+    },
+    onError: (error) => {
+      setIsLike(true);
+      console.error("Error unlike tweet", error.message);
+      alert(`Error unlike tweet: ${String(error)}`);
+      throw Error(String(error));
+    },
+  });
+
   return (
     <div className="flex items-center gap-2">
       <div className="cursor-pointer">
@@ -41,6 +53,10 @@ export default function LikeTweet({
               setIsLike(false);
               setAmount((prevAmount) => prevAmount - 1);
               console.log("unlike");
+              unLike.mutate({
+                tweetId: tweetId,
+                userId: userId,
+              });
             }}
           >
             <HeartFillIcon />

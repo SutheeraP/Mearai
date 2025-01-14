@@ -59,7 +59,7 @@ export default async function Tweet({
         <div className="flex justify-between">
           <LikeTweet
             tweetId={id}
-            userId={userId}
+            userId={currentUser.id}
             isLiked={isLiked}
             likes={likes}
           />
