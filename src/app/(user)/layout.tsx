@@ -5,9 +5,9 @@ import Trend from "~/app/_components/layout/Trend";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="relative">
+    <div className="relative h-dvh">
       <Header />
-      <div className="relative mx-auto h-dvh w-full max-w-[1200px] justify-center gap-4 overflow-hidden md:grid md:grid-cols-12">
+      <div className="mx-auto w-full max-w-[1200px] justify-center gap-4 overflow-hidden md:grid md:grid-cols-12">
         <div className="hidden pt-[60px] md:col-span-3 md:grid">
           <Navbar />
         </div>
