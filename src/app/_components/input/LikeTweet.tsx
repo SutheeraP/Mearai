@@ -6,14 +6,12 @@ import { api } from "~/trpc/react";
 
 type likeProps = {
   tweetId: number;
-  userId: string;
   isLiked: boolean;
   likes: number;
 };
 
 export default function LikeTweet({
   tweetId,
-  userId,
   isLiked,
   likes,
 }: likeProps) {
@@ -22,7 +20,7 @@ export default function LikeTweet({
 
   const like = api.tweet.likeTweet.useMutation({
     onSuccess: async (data) => {
-      console.log("like tweet successfully", data);
+      console.log("Like tweet successfully", data);
     },
     onError: (error) => {
       setIsLike(false);
@@ -34,7 +32,7 @@ export default function LikeTweet({
 
   const unLike = api.tweet.unLikeTweet.useMutation({
     onSuccess: async (data) => {
-      console.log("like tweet successfully", data);
+      console.log("Unlike tweet successfully", data);
     },
     onError: (error) => {
       setIsLike(true);
@@ -55,7 +53,6 @@ export default function LikeTweet({
               console.log("unlike");
               unLike.mutate({
                 tweetId: tweetId,
-                userId: userId,
               });
             }}
           >
@@ -68,7 +65,6 @@ export default function LikeTweet({
               setAmount((prevAmount) => prevAmount + 1);
               like.mutate({
                 tweetId: tweetId,
-                userId: userId,
               });
             }}
           >

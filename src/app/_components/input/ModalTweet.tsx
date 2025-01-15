@@ -19,16 +19,9 @@ export default function ModalTweet({
   tweetOriginal,
 }: ModalTweetProps) {
   const { isLoaded, isSignedIn, user } = useUser();
-  // console.log(user);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [tweetText, setTweetText] = useState("");
-
-  useEffect(() => {
-    if (mode == "edit" && tweetOriginal) {
-      setTweetText(tweetOriginal);
-    }
-  }, []);
+  const [tweetText, setTweetText] = useState(tweetOriginal);
 
   if (!isLoaded || !isSignedIn) {
     return null;
@@ -79,8 +72,6 @@ export default function ModalTweet({
     if (mode == "create") {
       createTweet.mutate({
         text: tweetTextVal,
-        user_id: user.id,
-        timestamp: new Date().toISOString(),
       });
     } else if (mode == "edit" && tweetId) {
       updateTweet.mutate({
@@ -99,7 +90,7 @@ export default function ModalTweet({
         {/* top */}
         <div className="flex items-baseline justify-between py-4">
           <div onClick={onClose} className="cursor-pointer">
-            Cancle
+            Cancel
           </div>
           <div className="flex items-baseline gap-4">
             {/* <div className="text-sm">0 / 240</div> */}

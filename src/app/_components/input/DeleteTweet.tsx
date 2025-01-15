@@ -19,7 +19,7 @@ export default function DeleteTweet({ tweetId }: Props) {
     },
     onError: (error) => {
       console.error("Error delete tweet:", error.message);
-      alert(`Error delelte tweet: ${String(error)}`);
+      alert(`Error delete tweet: ${String(error)}`);
       throw Error(String(error));
     },
   });

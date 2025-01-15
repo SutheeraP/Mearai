@@ -29,7 +29,7 @@ export default async function Tweet({
   // check auth to show delete button
   const currentUser = await getCurrentUser();
   if (!currentUser) {
-    return;
+    throw new Error("Unauthorized");
   }
 
   return (
@@ -57,12 +57,7 @@ export default async function Tweet({
         </div>
         {/* like and edit */}
         <div className="flex justify-between">
-          <LikeTweet
-            tweetId={id}
-            userId={currentUser.id}
-            isLiked={isLiked}
-            likes={likes}
-          />
+          <LikeTweet tweetId={id} isLiked={isLiked} likes={likes} />
           <div className="flex items-center gap-4">
             {currentUser.id == userId && (
               <>

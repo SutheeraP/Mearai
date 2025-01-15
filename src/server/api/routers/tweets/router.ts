@@ -4,26 +4,6 @@ import { PrismaClient, User } from "@prisma/client";
 
 export const tweetRouter = createTRPCRouter({
     getAllTweets: publicProcedure.query(async ({ ctx }) => {
-        // const data = ctx.db.tweet.findMany({
-        //     include: { user: true, tweetLikes: true }, // Include the related user object
-        //     orderBy: { timestamp: "desc" },
-        // })
-
-        // const prisma = new PrismaClient().$extends({
-        //     result: {
-        //         tweet: {
-        //             amountLikes: {
-        //                 // the dependencies
-        //                 needs: { tweetLikes: true },
-        //                 compute(tweet) {
-        //                     // the computation logic
-        //                     return tweet.tweetLikes.length
-        //                 },
-        //             },
-        //         },
-        //     },
-        // })
-
         return ctx.db.tweet.findMany({
             include: { user: true, tweetLikes: true }, // Include the related user object
             orderBy: { timestamp: "desc" },
@@ -33,18 +13,22 @@ export const tweetRouter = createTRPCRouter({
     createTweet: publicProcedure
         .input(tweetPayload)
         .mutation(async ({ ctx, input }) => {
-
+            if (!ctx.auth.userId) {
+                throw new Error('Unauthorized');
+            }
             return ctx.db.tweet.create({
                 data: {
                     text: input.text,
-                    timestamp: input.timestamp,
-                    userId: input.user_id,
+                    userId: ctx.auth.userId,
                 },
             });
         }),
     updateTweet: publicProcedure
         .input(updatePayload)
         .mutation(async ({ ctx, input }) => {
+            if (!ctx.auth.userId) {
+                throw new Error('Unauthorized');
+            }
             return ctx.db.tweet.update({
                 where: { id: input.id },
                 data: {
@@ -55,6 +39,9 @@ export const tweetRouter = createTRPCRouter({
     deleteTweet: publicProcedure
         .input(deletePayload)
         .mutation(async ({ ctx, input }) => {
+            if (!ctx.auth.userId) {
+                throw new Error('Unauthorized');
+            }
             return ctx.db.tweet.delete({
                 where: { id: input.id },
             })
@@ -62,24 +49,30 @@ export const tweetRouter = createTRPCRouter({
     likeTweet: publicProcedure
         .input(likePayload)
         .mutation(async ({ ctx, input }) => {
+            if (!ctx.auth.userId) {
+                throw new Error('Unauthorized');
+            }
             return ctx.db.tweet.update({
                 where: {
                     id: input.tweetId
                 },
                 data: {
-                    tweetLikes: { create: { user: { connect: { clerkId: input.userId } } } }
+                    tweetLikes: { create: { user: { connect: { clerkId: ctx.auth.userId } } } }
                 },
             })
         }),
     unLikeTweet: publicProcedure
         .input(likePayload)
         .mutation(async ({ ctx, input }) => {
+            if (!ctx.auth.userId) {
+                throw new Error('Unauthorized');
+            }
             return ctx.db.tweet.update({
                 where: {
                     id: input.tweetId
                 },
                 data: {
-                    tweetLikes: { deleteMany: { userId: input.userId } }
+                    tweetLikes: { deleteMany: { userId: ctx.auth.userId } }
                 },
                 include: {
                     tweetLikes: true,
