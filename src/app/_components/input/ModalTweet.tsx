@@ -3,7 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface ModalTweetProps {
   onClose: () => void;
