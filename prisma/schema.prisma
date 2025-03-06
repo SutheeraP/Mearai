@@ -44,6 +44,7 @@ model Tweet {
    userId     String   
    user       User     @relation(fields: [userId], references: [clerkId])
    tweetLikes      TweetLikes[]
+   tweetImages     String[]
 
    @@index([userId])
 }
@@ -59,4 +60,3 @@ model TweetLikes {
   @@index([tweetId])
   @@index([userId])
 }
-

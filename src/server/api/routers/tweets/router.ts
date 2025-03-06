@@ -1,5 +1,9 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { deletePayload, tweetPayload, updatePayload, likePayload } from "./interface";
+import { deletePayload, tweetPayload, updatePayload, likePayload, filePayload } from "./interface";
+import cuid2 from "@paralleldrive/cuid2";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { PutObjectCommand} from "@aws-sdk/client-s3";
+import { s3Client } from "~/server/s3";
 
 export const tweetRouter = createTRPCRouter({
     getAllTweets: publicProcedure.query(async ({ ctx }) => {
@@ -29,6 +33,7 @@ export const tweetRouter = createTRPCRouter({
                 data: {
                     text: input.text,
                     userId: ctx.auth.userId,
+                    tweetImages: input.files
                 },
             });
         }),
@@ -88,4 +93,24 @@ export const tweetRouter = createTRPCRouter({
                 }
             })
         }),
+    createPresignedUrls: publicProcedure
+        .input(filePayload)
+        .query(async ({ input }) => {
+            const urls = [];
+            for (let i = 0; i < input.count; i++) {
+                const key = 'images/'+cuid2.createId(); // file name in S3
+
+                const url = await getSignedUrl(
+                    s3Client,
+                    new PutObjectCommand({
+                        Bucket: process.env.AWS_S3_BUCKET_NAME,
+                        Key: key,
+                    })
+                )
+                urls.push({
+                    url, key
+                })
+            }
+            return urls;
+        })
 });

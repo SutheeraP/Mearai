@@ -19,6 +19,7 @@ export default async function Home() {
             userPhoto={tweet.user.photo}
             likes={tweet.amountLike}
             isLiked={tweet.isLiked}
+            images={tweet.tweetImages}
             key={tweet.id}
           />
         ))}

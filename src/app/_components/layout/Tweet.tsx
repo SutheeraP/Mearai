@@ -21,6 +21,7 @@ export default async function Tweet({
   username,
   userPhoto,
   likes,
+  images,
   isLiked,
 }: Tweet) {
   // console.log(tweet.user.username)
@@ -46,6 +47,7 @@ export default async function Tweet({
         />
       </div>
 
+      {/* col content */}
       <div className="flex w-full flex-col gap-3">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -55,6 +57,29 @@ export default async function Tweet({
           </div>
           <div className="break-all">{text}</div>
         </div>
+
+        {/* images section */}
+        {images.length != 0 ? (
+          <div className="grid aspect-video grid-cols-2 gap-2">
+            {images.map((image, i) => (
+              <div
+                className={`${images.length == 3 && i == 0 ? `row-span-2` : ``} ${images.length == 1 && i == 0 ? `col-span-2` : ``} relative overflow-hidden rounded-md`}
+                key={i}
+              >
+                <Image
+                  src={
+                    "https://mearai-bucket.s3.ap-southeast-1.amazonaws.com/" +
+                    image
+                  }
+                  alt="image"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+
         {/* like and edit */}
         <div className="flex justify-between">
           <LikeTweet tweetId={id} isLiked={isLiked} likes={likes} />

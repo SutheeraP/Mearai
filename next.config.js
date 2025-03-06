@@ -5,12 +5,21 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
+
+if (!process.env.AWS_HOSTNAME) {
+  throw new Error("AWS_HOSTNAME environment variable is not set.");
+}
+
 const config = {
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "img.clerk.com",
+        hostname: "img.clerk.com"
+      },
+      {
+        protocol: "https",
+        hostname: process.env.AWS_HOSTNAME
       },
     ],
   },

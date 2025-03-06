@@ -4,6 +4,7 @@ import Image from "next/image";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ImageIcon from "~/app/_components/svg/ImageIcon";
 
 interface ModalTweetProps {
   onClose: () => void;
@@ -22,10 +23,27 @@ export default function ModalTweet({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tweetText, setTweetText] = useState(tweetOriginal);
+  const [file, setFile] = useState<FileList | null>();
+  const [preview, setPreview] = useState<string[]>([]);
 
   if (!isLoaded || !isSignedIn) {
     return null;
   }
+
+  const onFileChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setFile(e.currentTarget.files);
+    if (e.currentTarget.files) {
+      const previews: string[] = [];
+      for (const file of e.currentTarget.files) {
+        const objectUrl = URL.createObjectURL(file);
+        previews.push(objectUrl);
+      }
+      // console.log("pre", previews);
+      setPreview(previews);
+    } else {
+      setPreview([]);
+    }
+  };
 
   const updateTweet = api.tweet.updateTweet.useMutation({
     onSuccess: async (data) => {
@@ -58,10 +76,33 @@ export default function ModalTweet({
       throw Error(String(error));
     },
   });
+  const presignedUrl = api.tweet.createPresignedUrls.useQuery({
+    count: file ? file.length : 0,
+  });
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
     const tweetTextVal = formData.get("tweetText") as string;
+
+    // console.log(presignedUrl);
+
+    const uploads: string[] = []; // list of uploaded
+    if (file && presignedUrl.data) {
+      for (let i = 0; i < file.length; i++) {
+        const f = file[i];
+        const data = presignedUrl.data[i]; // data.key = name / data.url = presign
+
+        if (f && data?.key && data?.url) {
+          // go in s3 laew
+          await fetch(data.url, {
+            method: "PUT",
+            body: f,
+          });
+
+          uploads.push(data.key);
+        }
+      }
+    }
 
     if (!tweetTextVal.length) {
       setIsSubmitting(false);
@@ -72,6 +113,7 @@ export default function ModalTweet({
     if (mode == "create") {
       createTweet.mutate({
         text: tweetTextVal,
+        files: uploads,
       });
     } else if (mode == "edit" && tweetId) {
       updateTweet.mutate({
@@ -92,7 +134,24 @@ export default function ModalTweet({
           <div onClick={onClose} className="cursor-pointer">
             Cancel
           </div>
+
           <div className="flex items-baseline gap-4">
+            {/* image upload */}
+            <div className="justify-end">
+              <label
+                htmlFor="upload-image"
+                className="cursor-pointer text-main"
+              >
+                <ImageIcon size={20} />
+              </label>
+              <input
+                id="upload-image"
+                type="file"
+                onChange={onFileChange}
+                multiple
+                className="hidden"
+              ></input>
+            </div>
             {/* <div className="text-sm">0 / 240</div> */}
             <button
               // onClick={onClose}
@@ -115,15 +174,36 @@ export default function ModalTweet({
             />
           </div>
 
-          <textarea
-            name="tweetText"
-            placeholder="Me a rai?"
-            onChange={(e) => {
-              setTweetText(e.target.value);
-            }}
-            value={tweetText}
-            className="h-[300px] w-full bg-transparent text-[16px] placeholder:text-slate-500 focus:outline-none"
-          ></textarea>
+          <div className="w-full">
+            <textarea
+              name="tweetText"
+              placeholder="Me a rai?"
+              onChange={(e) => {
+                setTweetText(e.target.value);
+              }}
+              value={tweetText}
+              className="h-[200px] w-full bg-transparent text-[16px] placeholder:text-slate-500 focus:outline-none"
+            ></textarea>
+
+            {/* images section */}
+            {preview.length != 0 ? (
+              <div className="grid aspect-video grid-cols-2 gap-2">
+                {preview.map((image, i) => (
+                  <div
+                    className={`${preview.length == 3 && i == 0 ? `row-span-2` : ``} ${preview.length == 1 && i == 0 ? `col-span-2` : ``} relative overflow-hidden rounded-md`}
+                    key={i}
+                  >
+                    <Image
+                      src={image}
+                      alt="image"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </section>
       </div>
     </form>

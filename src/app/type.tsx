@@ -7,4 +7,5 @@ export type Tweet = {
   userPhoto: string;
   likes: number;
   isLiked: boolean;
+  images: string[];
 };
