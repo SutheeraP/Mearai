@@ -5,6 +5,7 @@ import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ImageIcon from "~/app/_components/svg/ImageIcon";
+import CloseIcon from "~/app/_components/svg/CloseIcon";
 
 interface ModalTweetProps {
   onClose: () => void;
@@ -31,11 +32,49 @@ export default function ModalTweet({
   }
 
   const onFileChange = (e: React.FormEvent<HTMLInputElement>) => {
-    setFile(e.currentTarget.files);
-    if (e.currentTarget.files) {
+    // add new file to old list
+    const newFiles = e.currentTarget.files;
+    if (newFiles) {
+      setFile((prevFiles) => {
+        if (prevFiles) {
+          const mergedFiles = new DataTransfer();
+
+          // old file
+          for (let i = 0; i < prevFiles.length; i++) {
+            mergedFiles.items.add(prevFiles.item(i)!);
+          }
+
+          // new file
+          for (let i = 0; i < newFiles.length; i++) {
+            if (mergedFiles.files.length >= 4) {
+              break;
+            }
+            mergedFiles.items.add(newFiles.item(i)!);
+          }
+          updatePreview(mergedFiles.files);
+          return mergedFiles.files;
+        } else {
+          // First selection
+          if (newFiles.length >= 4) {
+            const limitedFiles = new DataTransfer();
+            for (let i = 0; i < 4; i++) {
+              limitedFiles.items.add(newFiles.item(i)!);
+            }
+            updatePreview(limitedFiles.files);
+            return limitedFiles.files;
+          }
+          updatePreview(newFiles);
+          return newFiles;
+        }
+      });
+    }
+  };
+
+  const updatePreview = (files: FileList) => {
+    if (files) {
       const previews: string[] = [];
-      for (const file of e.currentTarget.files) {
-        const objectUrl = URL.createObjectURL(file);
+      for (const f of files) {
+        const objectUrl = URL.createObjectURL(f);
         previews.push(objectUrl);
       }
       // console.log("pre", previews);
@@ -43,6 +82,30 @@ export default function ModalTweet({
     } else {
       setPreview([]);
     }
+  };
+
+  const handleDeleteImage = (i: number) => {
+    setPreview((prevPreviews) => {
+      const newPreviews = [...prevPreviews];
+      const deletedUrl = newPreviews[i];
+      if (deletedUrl) {
+        URL.revokeObjectURL(deletedUrl);
+      }
+      newPreviews.splice(i, 1);
+      return newPreviews;
+    });
+
+    setFile((prevFiles) => {
+      if (!prevFiles) return null;
+      const newFiles = new DataTransfer();
+      for (let j = 0; j < prevFiles.length; j++) {
+        if (j !== i) {
+          newFiles.items.add(prevFiles.item(j)!);
+        }
+      }
+      console.log("after delete file", newFiles.files);
+      return newFiles.files;
+    });
   };
 
   const updateTweet = api.tweet.updateTweet.useMutation({
@@ -130,19 +193,19 @@ export default function ModalTweet({
     >
       <div className="mx-auto h-full bg-dark px-4 md:mt-12 md:h-fit md:w-[500px] md:rounded-md">
         {/* top */}
-        <div className="flex items-baseline justify-between py-4">
+        <div className="flex items-center justify-between py-4">
           <div onClick={onClose} className="cursor-pointer">
             Cancel
           </div>
 
-          <div className="flex items-baseline gap-4">
+          <div className="flex items-center gap-4">
             {/* image upload */}
-            <div className="justify-end">
+            <div className="">
               <label
                 htmlFor="upload-image"
-                className="cursor-pointer text-main"
+                className={`${(file?.length ?? 0) >= 4 ? "text-gray-500" : "cursor-pointer text-main"}`}
               >
-                <ImageIcon size={20} />
+                <ImageIcon />
               </label>
               <input
                 id="upload-image"
@@ -150,6 +213,7 @@ export default function ModalTweet({
                 onChange={onFileChange}
                 multiple
                 className="hidden"
+                disabled={(file?.length ?? 0) >= 4}
               ></input>
             </div>
             {/* <div className="text-sm">0 / 240</div> */}
@@ -193,6 +257,14 @@ export default function ModalTweet({
                     className={`${preview.length == 3 && i == 0 ? `row-span-2` : ``} ${preview.length == 1 && i == 0 ? `col-span-2` : ``} relative overflow-hidden rounded-md`}
                     key={i}
                   >
+                    <div
+                      className="absolute right-0 z-10 m-2 cursor-pointer rounded-full bg-black bg-opacity-50 p-1"
+                      onClick={() => {
+                        handleDeleteImage(i);
+                      }}
+                    >
+                      <CloseIcon size={18} />
+                    </div>
                     <Image
                       src={image}
                       alt="image"
