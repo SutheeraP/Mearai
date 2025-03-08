@@ -35,6 +35,7 @@ export default function ModalTweet({
     // add new file to old list
     const newFiles = e.currentTarget.files;
     const oldFile = file;
+    const maxFileSize = 4 * 1024 * 1024; // 2 MB in bytes
     const mergedFiles = new DataTransfer();
     
     if (newFiles) {
@@ -53,7 +54,12 @@ export default function ModalTweet({
         if (mergedFiles.files.length >= 4) {
           break;
         }
-        mergedFiles.items.add(newFiles.item(i)!);
+        const f = newFiles.item(i)
+        if(f?.size && f?.size > maxFileSize){
+          alert(`File "${f?.name}" exceeds the maximum size of 4MB.`)
+          return
+        }
+        mergedFiles.items.add(f!);
       }
     }
 
