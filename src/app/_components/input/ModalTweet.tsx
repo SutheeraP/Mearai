@@ -34,40 +34,31 @@ export default function ModalTweet({
   const onFileChange = (e: React.FormEvent<HTMLInputElement>) => {
     // add new file to old list
     const newFiles = e.currentTarget.files;
+    const oldFile = file;
+    const mergedFiles = new DataTransfer();
+    
     if (newFiles) {
-      setFile((prevFiles) => {
-        if (prevFiles) {
-          const mergedFiles = new DataTransfer();
-
-          // old file
-          for (let i = 0; i < prevFiles.length; i++) {
-            mergedFiles.items.add(prevFiles.item(i)!);
+      console.log("on file change");
+      // old file
+      if (oldFile) {
+        for (let i = 0; i < oldFile.length; i++) {
+          if (mergedFiles.files.length >= 4) {
+            break;
           }
-
-          // new file
-          for (let i = 0; i < newFiles.length; i++) {
-            if (mergedFiles.files.length >= 4) {
-              break;
-            }
-            mergedFiles.items.add(newFiles.item(i)!);
-          }
-          updatePreview(mergedFiles.files);
-          return mergedFiles.files;
-        } else {
-          // First selection
-          if (newFiles.length >= 4) {
-            const limitedFiles = new DataTransfer();
-            for (let i = 0; i < 4; i++) {
-              limitedFiles.items.add(newFiles.item(i)!);
-            }
-            updatePreview(limitedFiles.files);
-            return limitedFiles.files;
-          }
-          updatePreview(newFiles);
-          return newFiles;
+          mergedFiles.items.add(oldFile.item(i)!);
         }
-      });
+      }
+      // new file
+      for (let i = 0; i < newFiles.length; i++) {
+        if (mergedFiles.files.length >= 4) {
+          break;
+        }
+        mergedFiles.items.add(newFiles.item(i)!);
+      }
     }
+
+    updatePreview(mergedFiles.files);
+    setFile(mergedFiles.files);
   };
 
   const updatePreview = (files: FileList) => {
@@ -139,21 +130,31 @@ export default function ModalTweet({
       throw Error(String(error));
     },
   });
-  const presignedUrl = api.tweet.createPresignedUrls.useQuery({
-    count: file ? file.length : 0,
-  });
 
+  const presignedUrl = api.tweet.createPresignedUrls.useMutation({
+    onSuccess: async (data) => {
+      return data
+    },
+    onError: (error) => {
+      console.error("Error creating tweet:", error.message);
+      alert(`Error creating tweet: ${String(error)}`);
+      throw Error(String(error));
+    },
+  });
+  
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
     const tweetTextVal = formData.get("tweetText") as string;
-
-    // console.log(presignedUrl);
-
     const uploads: string[] = []; // list of uploaded
-    if (file && presignedUrl.data) {
+
+    const urls = await presignedUrl.mutateAsync({
+      count:  file ? file.length : 0
+    })
+
+    if (file && urls) {
       for (let i = 0; i < file.length; i++) {
         const f = file[i];
-        const data = presignedUrl.data[i]; // data.key = name / data.url = presign
+        const data = urls[i]; // data.key = name / data.url = presign
 
         if (f && data?.key && data?.url) {
           // go in s3 laew

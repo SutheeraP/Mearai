@@ -95,7 +95,7 @@ export const tweetRouter = createTRPCRouter({
         }),
     createPresignedUrls: publicProcedure
         .input(filePayload)
-        .query(async ({ input }) => {
+        .mutation(async ({ input }) => {
             const urls = [];
             for (let i = 0; i < input.count; i++) {
                 const key = 'images/'+cuid2.createId(); // file name in S3
@@ -112,5 +112,5 @@ export const tweetRouter = createTRPCRouter({
                 })
             }
             return urls;
-        })
+        }),
 });
