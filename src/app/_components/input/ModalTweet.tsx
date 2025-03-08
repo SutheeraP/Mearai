@@ -37,7 +37,7 @@ export default function ModalTweet({
     const oldFile = file;
     const maxFileSize = 4 * 1024 * 1024; // 2 MB in bytes
     const mergedFiles = new DataTransfer();
-    
+
     if (newFiles) {
       console.log("on file change");
       // old file
@@ -54,10 +54,10 @@ export default function ModalTweet({
         if (mergedFiles.files.length >= 4) {
           break;
         }
-        const f = newFiles.item(i)
-        if(f?.size && f?.size > maxFileSize){
-          alert(`File "${f?.name}" exceeds the maximum size of 4MB.`)
-          return
+        const f = newFiles.item(i);
+        if (f?.size && f?.size > maxFileSize) {
+          alert(`File "${f?.name}" exceeds the maximum size of 4MB.`);
+          return;
         }
         mergedFiles.items.add(f!);
       }
@@ -139,7 +139,7 @@ export default function ModalTweet({
 
   const presignedUrl = api.tweet.createPresignedUrls.useMutation({
     onSuccess: async (data) => {
-      return data
+      return data;
     },
     onError: (error) => {
       console.error("Error creating tweet:", error.message);
@@ -147,15 +147,15 @@ export default function ModalTweet({
       throw Error(String(error));
     },
   });
-  
+
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
     const tweetTextVal = formData.get("tweetText") as string;
     const uploads: string[] = []; // list of uploaded
 
     const urls = await presignedUrl.mutateAsync({
-      count:  file ? file.length : 0
-    })
+      count: file ? file.length : 0,
+    });
 
     if (file && urls) {
       for (let i = 0; i < file.length; i++) {
@@ -174,10 +174,10 @@ export default function ModalTweet({
       }
     }
 
-    if (!tweetTextVal.length) {
-      setIsSubmitting(false);
-      return alert("Type something 🫵");
-    }
+    // if (!tweetTextVal.length) {
+    //   setIsSubmitting(false);
+    //   return alert("Type something 🫵");
+    // }
 
     // check mode then mutate
     if (mode == "create") {
@@ -206,6 +206,17 @@ export default function ModalTweet({
           </div>
 
           <div className="flex items-center gap-4">
+            {/* letter count */}
+            <div className="text-sm">
+              <span
+                className={
+                  tweetText && tweetText?.length > 240 ? "text-red-400" : ""
+                }
+              >
+                {tweetText?.length ?? 0}
+              </span>{" "}
+              / 240
+            </div>
             {/* image upload */}
             <div className="">
               <label
@@ -224,12 +235,16 @@ export default function ModalTweet({
                 disabled={(file?.length ?? 0) >= 4}
               ></input>
             </div>
-            {/* <div className="text-sm">0 / 240</div> */}
+
             <button
-              // onClick={onClose}
               type="submit"
-              disabled={isSubmitting}
-              className={`${isSubmitting ? "animate-pulse" : ""} cursor-pointer rounded-md bg-main px-6 py-1 font-semibold text-dark`}
+              disabled={
+                isSubmitting ||
+                tweetText == undefined ||
+                tweetText.length == 0 ||
+                tweetText.length > 240
+              }
+              className={`${isSubmitting ? "animate-pulse" : ""} cursor-pointer rounded-md bg-main px-6 py-1 font-semibold text-dark disabled:cursor-not-allowed disabled:bg-slate-400`}
             >
               {mode == "create" ? "Post" : "Save"}
             </button>
@@ -254,7 +269,7 @@ export default function ModalTweet({
                 setTweetText(e.target.value);
               }}
               value={tweetText}
-              className="h-[200px] w-full bg-transparent text-[16px] placeholder:text-slate-500 focus:outline-none"
+              className="h-fit min-h-[150px] w-full bg-transparent text-[16px] placeholder:text-slate-500 focus:outline-none"
             ></textarea>
 
             {/* images section */}
