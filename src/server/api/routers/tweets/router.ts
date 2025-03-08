@@ -2,7 +2,7 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { deletePayload, tweetPayload, updatePayload, likePayload, filePayload } from "./interface";
 import cuid2 from "@paralleldrive/cuid2";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { PutObjectCommand} from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "~/server/s3";
 
 export const tweetRouter = createTRPCRouter({
@@ -43,6 +43,33 @@ export const tweetRouter = createTRPCRouter({
             if (!ctx.auth.userId) {
                 throw new Error('Unauthorized');
             }
+            const tweet = await ctx.db.tweet.findUnique({
+                where: { id: input.id },
+            })
+            if (!tweet) {
+                throw new Error('Tweet not found');
+            }
+
+            // Retrieve existing image keys
+            const existingImageKeys = tweet.tweetImages
+
+            // Determine images to delete
+            const deleteImageKeys = existingImageKeys.filter(
+                (key) => !input.files?.includes(key)
+            );
+
+            // Delete images from AWS S3
+            if (deleteImageKeys.length > 0) {
+                for (const key of deleteImageKeys) {
+                    await s3Client.send(
+                        new DeleteObjectCommand({
+                            Bucket: process.env.AWS_S3_BUCKET_NAME,
+                            Key: key,
+                        })
+                    );
+                }
+            }
+
             return ctx.db.tweet.update({
                 where: { id: input.id },
                 data: {
@@ -57,6 +84,28 @@ export const tweetRouter = createTRPCRouter({
             if (!ctx.auth.userId) {
                 throw new Error('Unauthorized');
             }
+            const tweet = await ctx.db.tweet.findUnique({
+                where: { id: input.id },
+            })
+            if (!tweet) {
+                throw new Error('Tweet not found');
+            }
+
+            // Retrieve existing image keys
+            const images = tweet.tweetImages
+
+            // Delete images from AWS S3
+            if (images.length > 0) {
+                for (const key of images) {
+                    await s3Client.send(
+                        new DeleteObjectCommand({
+                            Bucket: process.env.AWS_S3_BUCKET_NAME,
+                            Key: key,
+                        })
+                    );
+                }
+            }
+
             return ctx.db.tweet.delete({
                 where: { id: input.id },
             })
@@ -96,10 +145,14 @@ export const tweetRouter = createTRPCRouter({
         }),
     createPresignedUrls: publicProcedure
         .input(filePayload)
-        .mutation(async ({ input }) => {
+        .mutation(async ({ ctx, input }) => {
+            if (!ctx.auth.userId) {
+                throw new Error('Unauthorized');
+            }
+
             const urls = [];
             for (let i = 0; i < input.count; i++) {
-                const key = 'images/'+cuid2.createId(); // file name in S3
+                const key = 'images/' + cuid2.createId(); // file name in S3
 
                 const url = await getSignedUrl(
                     s3Client,

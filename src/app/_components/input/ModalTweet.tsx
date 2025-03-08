@@ -145,8 +145,8 @@ export default function ModalTweet({
       return data;
     },
     onError: (error) => {
-      console.error("Error creating tweet:", error.message);
-      alert(`Error creating tweet: ${String(error)}`);
+      console.error("Error get presigned URL:", error.message);
+      alert(`Error get presigned URL: ${String(error)}`);
       throw Error(String(error));
     },
   });
@@ -282,7 +282,10 @@ export default function ModalTweet({
                     index={i}
                     length={existImage.length + preview.length}
                     mode="edit"
-                    path={'https://mearai-bucket.s3.ap-southeast-1.amazonaws.com/' + image}
+                    path={
+                      "https://mearai-bucket.s3.ap-southeast-1.amazonaws.com/" +
+                      image
+                    }
                     onRemove={() => {
                       setExistImage((pre) => {
                         const copy = [...pre];
