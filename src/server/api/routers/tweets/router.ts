@@ -47,6 +47,7 @@ export const tweetRouter = createTRPCRouter({
                 where: { id: input.id },
                 data: {
                     text: input.text,
+                    tweetImages: input.files
                 },
             });
         }),

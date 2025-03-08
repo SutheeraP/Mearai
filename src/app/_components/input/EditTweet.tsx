@@ -7,9 +7,10 @@ import EditIcon from "~/app/_components/svg/EditIcon";
 type Props = {
   tweetId: number;
   tweetText: string;
+  tweetImage?: string[];
 };
 
-export default function EditTweet({ tweetId, tweetText }: Props) {
+export default function EditTweet({ tweetId, tweetText, tweetImage }: Props) {
   const [showModal, setShowModal] = useState(false);
   // call modal with mode: edit
   return (
@@ -22,6 +23,7 @@ export default function EditTweet({ tweetId, tweetText }: Props) {
           mode="edit"
           tweetId={tweetId}
           tweetOriginal={tweetText}
+          imageOriginal={tweetImage}
         />
       )}
       <div

@@ -11,6 +11,9 @@ export const tweetPayload = z.object({
 export const updatePayload = z.object({
     id: z.number(),
     text: z.string(),
+    files: z.array(
+        z.string(),
+    ).max(4)
 })
 
 export const deletePayload = z.object({

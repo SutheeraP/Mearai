@@ -5,13 +5,14 @@ import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ImageIcon from "~/app/_components/svg/ImageIcon";
-import CloseIcon from "~/app/_components/svg/CloseIcon";
+import ImageTweet from "~/app/_components/layout/ImageTweet";
 
 interface ModalTweetProps {
   onClose: () => void;
   mode: "create" | "edit";
   tweetId?: number;
   tweetOriginal?: string;
+  imageOriginal?: string[];
 }
 
 export default function ModalTweet({
@@ -19,6 +20,7 @@ export default function ModalTweet({
   mode,
   tweetId,
   tweetOriginal,
+  imageOriginal,
 }: ModalTweetProps) {
   const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
@@ -26,6 +28,9 @@ export default function ModalTweet({
   const [tweetText, setTweetText] = useState(tweetOriginal);
   const [file, setFile] = useState<FileList | null>();
   const [preview, setPreview] = useState<string[]>([]);
+  const [existImage, setExistImage] = useState<string[]>(
+    imageOriginal ? imageOriginal : [],
+  );
 
   if (!isLoaded || !isSignedIn) {
     return null;
@@ -39,11 +44,10 @@ export default function ModalTweet({
     const mergedFiles = new DataTransfer();
 
     if (newFiles) {
-      console.log("on file change");
       // old file
       if (oldFile) {
         for (let i = 0; i < oldFile.length; i++) {
-          if (mergedFiles.files.length >= 4) {
+          if (mergedFiles.files.length + existImage.length >= 4) {
             break;
           }
           mergedFiles.items.add(oldFile.item(i)!);
@@ -51,7 +55,7 @@ export default function ModalTweet({
       }
       // new file
       for (let i = 0; i < newFiles.length; i++) {
-        if (mergedFiles.files.length >= 4) {
+        if (mergedFiles.files.length + existImage.length >= 4) {
           break;
         }
         const f = newFiles.item(i);
@@ -74,7 +78,6 @@ export default function ModalTweet({
         const objectUrl = URL.createObjectURL(f);
         previews.push(objectUrl);
       }
-      // console.log("pre", previews);
       setPreview(previews);
     } else {
       setPreview([]);
@@ -151,12 +154,14 @@ export default function ModalTweet({
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
     const tweetTextVal = formData.get("tweetText") as string;
-    const uploads: string[] = []; // list of uploaded
+    const uploads: string[] = existImage; // list of uploaded
 
+    // presign url
     const urls = await presignedUrl.mutateAsync({
       count: file ? file.length : 0,
     });
 
+    // collect image path in upload[]
     if (file && urls) {
       for (let i = 0; i < file.length; i++) {
         const f = file[i];
@@ -174,11 +179,6 @@ export default function ModalTweet({
       }
     }
 
-    // if (!tweetTextVal.length) {
-    //   setIsSubmitting(false);
-    //   return alert("Type something 🫵");
-    // }
-
     // check mode then mutate
     if (mode == "create") {
       createTweet.mutate({
@@ -189,6 +189,7 @@ export default function ModalTweet({
       updateTweet.mutate({
         text: tweetTextVal,
         id: tweetId,
+        files: uploads,
       });
     }
   };
@@ -217,11 +218,11 @@ export default function ModalTweet({
               </span>{" "}
               / 240
             </div>
-            {/* image upload */}
+            {/* image upload icon*/}
             <div className="">
               <label
                 htmlFor="upload-image"
-                className={`${(file?.length ?? 0) >= 4 ? "text-gray-500" : "cursor-pointer text-main"}`}
+                className={`${preview.length + existImage.length >= 4 ? "text-gray-500" : "cursor-pointer text-main"}`}
               >
                 <ImageIcon />
               </label>
@@ -232,7 +233,7 @@ export default function ModalTweet({
                 multiple
                 className="hidden"
                 accept="image/png, image/jpeg, image/heic, image/heif"
-                disabled={(file?.length ?? 0) >= 4}
+                disabled={preview.length + existImage.length >= 4}
               ></input>
             </div>
 
@@ -273,31 +274,38 @@ export default function ModalTweet({
             ></textarea>
 
             {/* images section */}
-            {preview.length != 0 ? (
+            {preview.length + existImage.length != 0 && (
               <div className="grid aspect-video grid-cols-2 gap-2">
-                {preview.map((image, i) => (
-                  <div
-                    className={`${preview.length == 3 && i == 0 ? `row-span-2` : ``} ${preview.length == 1 && i == 0 ? `col-span-2` : ``} relative overflow-hidden rounded-md`}
+                {existImage.map((image, i) => (
+                  <ImageTweet
                     key={i}
-                  >
-                    <div
-                      className="absolute right-0 z-10 m-2 cursor-pointer rounded-full bg-black bg-opacity-50 p-1"
-                      onClick={() => {
-                        handleDeleteImage(i);
-                      }}
-                    >
-                      <CloseIcon size={18} />
-                    </div>
-                    <Image
-                      src={image}
-                      alt="image"
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </div>
+                    index={i}
+                    length={existImage.length + preview.length}
+                    mode="edit"
+                    path={'https://mearai-bucket.s3.ap-southeast-1.amazonaws.com/' + image}
+                    onRemove={() => {
+                      setExistImage((pre) => {
+                        const copy = [...pre];
+                        copy.splice(i, 1);
+                        return copy;
+                      });
+                    }}
+                  />
+                ))}
+                {preview.map((image, i) => (
+                  <ImageTweet
+                    key={i}
+                    index={existImage.length + i}
+                    length={existImage.length + preview.length}
+                    mode="edit"
+                    path={image}
+                    onRemove={() => {
+                      handleDeleteImage(i);
+                    }}
+                  />
                 ))}
               </div>
-            ) : null}
+            )}
           </div>
         </section>
       </div>

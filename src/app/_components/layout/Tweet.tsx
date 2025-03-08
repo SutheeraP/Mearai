@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import DeleteTweet from "~/app/_components/input/DeleteTweet";
 import { type Tweet } from "~/app/type";
 
 // time format
@@ -10,8 +9,12 @@ TimeAgo.addDefaultLocale(en);
 
 // get current user
 import getCurrentUser from "~/app/function/currentUser";
+
+// component
 import EditTweet from "~/app/_components/input/EditTweet";
 import LikeTweet from "~/app/_components/input/LikeTweet";
+import ImageTweet from "~/app/_components/layout/ImageTweet";
+import DeleteTweet from "~/app/_components/input/DeleteTweet";
 
 export default async function Tweet({
   id,
@@ -59,26 +62,19 @@ export default async function Tweet({
         </div>
 
         {/* images section */}
-        {images.length != 0 ? (
+        {images.length != 0 && (
           <div className="grid aspect-video grid-cols-2 gap-2">
             {images.map((image, i) => (
-              <div
-                className={`${images.length == 3 && i == 0 ? `row-span-2` : ``} ${images.length == 1 && i == 0 ? `col-span-2` : ``} relative overflow-hidden rounded-md`}
+              <ImageTweet
                 key={i}
-              >
-                <Image
-                  src={
-                    "https://mearai-bucket.s3.ap-southeast-1.amazonaws.com/" +
-                    image
-                  }
-                  alt="image"
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
+                index={i}
+                length={images.length}
+                mode="show"
+                path={process.env.AWS_HOSTNAME + image}
+              />
             ))}
           </div>
-        ) : null}
+        )}
 
         {/* like and edit */}
         <div className="flex justify-between">
@@ -86,7 +82,7 @@ export default async function Tweet({
           <div className="flex items-center gap-4">
             {currentUser.id == userId && (
               <>
-                <EditTweet tweetId={id} tweetText={text} />
+                <EditTweet tweetId={id} tweetText={text} tweetImage={images} />
                 <DeleteTweet tweetId={id} />
               </>
             )}
