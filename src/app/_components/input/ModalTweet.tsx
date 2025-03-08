@@ -213,6 +213,7 @@ export default function ModalTweet({
                 onChange={onFileChange}
                 multiple
                 className="hidden"
+                accept="image/png, image/jpeg, image/heic, image/heif"
                 disabled={(file?.length ?? 0) >= 4}
               ></input>
             </div>
