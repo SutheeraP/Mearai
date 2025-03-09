@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ImageIcon from "~/app/_components/svg/ImageIcon";
 import ImageTweet from "~/app/_components/layout/ImageTweet";
+import { flushSync } from "react-dom";
 
 interface ModalTweetProps {
   onClose: () => void;
@@ -151,28 +152,31 @@ export default function ModalTweet({
   });
 
   const handleSubmit = async (formData: FormData) => {
-    setIsSubmitting(true);
+    flushSync(() => { // Force immediate update
+      setIsSubmitting(true);
+    });
+
     const tweetTextVal = formData.get("tweetText") as string;
     const uploads: string[] = existImage; // list of uploaded
 
-    // presign url
-    const urls = await presignedUrl.mutateAsync({
-      count: file ? file.length : 0,
-    });
-
     // collect image path in upload[]
-    if (file && urls) {
+    if (file) {
+      // presigned url
+      const urls = await presignedUrl.mutateAsync({
+        count: file ? file.length : 0,
+      });
+
       for (let i = 0; i < file.length; i++) {
         const f = file[i];
-        const data = urls[i]; // data.key = name / data.url = presign
+        const data = urls[i]; // data.key = name / data.url = presigned
 
         if (f && data?.key && data?.url) {
-          // go in s3 laew
+          // put to S3
           await fetch(data.url, {
             method: "PUT",
             body: f,
           });
-
+          // keep path
           uploads.push(data.key);
         }
       }
@@ -186,8 +190,8 @@ export default function ModalTweet({
       });
     } else if (mode == "edit" && tweetId) {
       updateTweet.mutate({
-        text: tweetTextVal,
         id: tweetId,
+        text: tweetTextVal,
         files: uploads,
       });
     }
@@ -244,7 +248,7 @@ export default function ModalTweet({
                 tweetText.length == 0 ||
                 tweetText.length > 240
               }
-              className={`${isSubmitting ? "animate-pulse" : ""} cursor-pointer rounded-md bg-main px-6 py-1 font-semibold text-dark disabled:cursor-not-allowed disabled:bg-slate-400`}
+              className={`${isSubmitting ? "animate-pulse" : ""} cursor-pointer rounded-md bg-main px-6 py-1 font-semibold text-dark disabled:cursor-default disabled:bg-slate-400`}
             >
               {mode == "create" ? "Post" : "Save"}
             </button>
