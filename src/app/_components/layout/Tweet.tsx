@@ -70,7 +70,7 @@ export default async function Tweet({
                 index={i}
                 length={images.length}
                 mode="show"
-                path={process.env.AWS_HOSTNAME + image}
+                path={process.env.AWS_CLOUDFRONT + image}
               />
             ))}
           </div>

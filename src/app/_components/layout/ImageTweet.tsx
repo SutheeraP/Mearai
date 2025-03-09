@@ -17,7 +17,6 @@ export default function ImageTweet({
   index,
   length,
 }: ImageTweetProps) {
-  console.log("img", path);
   return (
     <div
       className={`${length == 3 && index == 0 ? `row-span-2` : ``} ${length == 1 && index == 0 ? `col-span-2` : ``} relative overflow-hidden rounded-md`}

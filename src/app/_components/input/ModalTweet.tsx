@@ -103,14 +103,13 @@ export default function ModalTweet({
           newFiles.items.add(prevFiles.item(j)!);
         }
       }
-      console.log("after delete file", newFiles.files);
       return newFiles.files;
     });
   };
 
   const updateTweet = api.tweet.updateTweet.useMutation({
     onSuccess: async (data) => {
-      console.log("Update tweet successfully:", data);
+      // console.log("Update tweet successfully:", data);
       router.push("/");
       router.refresh();
       setIsSubmitting(false);
@@ -126,7 +125,7 @@ export default function ModalTweet({
 
   const createTweet = api.tweet.createTweet.useMutation({
     onSuccess: async (data) => {
-      console.log("Create tweet successfully:", data);
+      // console.log("Create tweet successfully:", data);
       router.push("/");
       router.refresh();
       setIsSubmitting(false);
@@ -282,10 +281,7 @@ export default function ModalTweet({
                     index={i}
                     length={existImage.length + preview.length}
                     mode="edit"
-                    path={
-                      "https://mearai-bucket.s3.ap-southeast-1.amazonaws.com/" +
-                      image
-                    }
+                    path={"https://d2buncfwqfqaws.cloudfront.net/" + image}
                     onRemove={() => {
                       setExistImage((pre) => {
                         const copy = [...pre];
