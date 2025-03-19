@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { api } from "~/trpc/react";
@@ -32,6 +32,14 @@ export default function ModalTweet({
   const [existImage, setExistImage] = useState<string[]>(
     imageOriginal ? imageOriginal : [],
   );
+
+  useEffect(() => {
+    console.log("pre", preview);
+  }, [preview]);
+
+  useEffect(() => {
+    console.log("ex", existImage);
+  }, [existImage]);
 
   if (!isLoaded || !isSignedIn) {
     return null;
@@ -152,7 +160,8 @@ export default function ModalTweet({
   });
 
   const handleSubmit = async (formData: FormData) => {
-    flushSync(() => { // Force immediate update
+    flushSync(() => {
+      // Force immediate update
       setIsSubmitting(true);
     });
 
