@@ -1,7 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
     deletePayload, tweetPayload, updatePayload, likePayload, filePayload,
-    getUserPayload, getUserTweetsPayload, getUserLikeTweetsPayload
 } from "./interface";
 import cuid2 from "@paralleldrive/cuid2";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -23,7 +22,7 @@ export const tweetRouter = createTRPCRouter({
                 ...tweet,
                 amountLike: tweet.tweetLikes.length,
                 isLiked: tweet.tweetLikes.some((user) => user.userId == ctx.auth.userId),
-                isCurrentUserPost:  tweet.userId == ctx.auth.userId
+                isCurrentUserPost: tweet.userId == ctx.auth.userId
             }))
         return extendData
     })
@@ -172,37 +171,38 @@ export const tweetRouter = createTRPCRouter({
             }
             return urls;
         }),
-    getUser: publicProcedure.input(getUserPayload).query(async ({ ctx, input }) => {
+    getUser: publicProcedure.query(async ({ctx}) => {
         if (!ctx.auth.userId) {
             throw new Error('Unauthorized');
         }
         const user = await ctx.db.user.findUnique({
-            where: { username: input.username }
+            where: { clerkId: ctx.auth.userId }
         })
 
         if (!user) {
             throw new TRPCError({
                 code: 'NOT_FOUND',
-                message: `User with username '${input.username}' not found.`,
+                message: `User not found.`,
             });
         }
         return user;
     }),
-    getTweetbyUser: publicProcedure.input(getUserTweetsPayload).query(async ({ ctx, input }) => {
+    getTweetbyUser: publicProcedure.query(async ({ ctx }) => {
         if (!ctx.auth.userId) {
             throw new Error('Unauthorized');
         }
 
         const user = await ctx.db.user.findUnique({
-            where: { username: input.username },
+            where: { clerkId: ctx.auth.userId },
             include: {
                 tweets: {
                     include: {
                         user: true,
                         tweetLikes: true,
-                    }
-                }
-            }
+                    },
+                    orderBy: { timestamp: "desc" },
+                },
+            },
         })
 
         const extendTweet = user?.tweets.map(
@@ -210,15 +210,53 @@ export const tweetRouter = createTRPCRouter({
                 ...tweet,
                 amountLike: tweet.tweetLikes.length,
                 isLiked: tweet.tweetLikes.some((user) => user.userId == ctx.auth.userId),
-                isCurrentUserPost:  tweet.userId == ctx.auth.userId
+                isCurrentUserPost: tweet.userId == ctx.auth.userId
             }))
 
         if (!extendTweet) {
             throw new TRPCError({
                 code: 'NOT_FOUND',
-                message: `User with username '${input.username}' have 0 post.`,
+                message: `User have 0 post.`,
             });
         }
         return extendTweet;
     }),
+    getUserLikeTweet: publicProcedure.query(async ({ ctx, input }) => {
+        if (!ctx.auth.userId) {
+            throw new Error('Unauthorized');
+        }
+
+        const tweet = await ctx.db.tweet.findMany({
+            where: {
+                tweetLikes: {
+                    some: {
+                        userId: ctx.userId,
+                    },
+                },
+            },
+            include: {
+                tweetLikes: {
+                    include: {
+                        user: true,
+                    },
+                },
+                user: true,
+            },
+            orderBy: { timestamp: 'desc' },
+        })
+        const extendTweet = tweet.map(
+            tweet => ({
+                ...tweet,
+                amountLike: tweet.tweetLikes.length,
+                isLiked: tweet.tweetLikes.some((user) => user.userId == ctx.auth.userId),
+                isCurrentUserPost: tweet.userId == ctx.auth.userId
+            }))
+        if (!extendTweet) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: `User have 0 liked post.`,
+            });
+        }
+        return extendTweet;
+    })
 });

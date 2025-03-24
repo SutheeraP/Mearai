@@ -28,7 +28,6 @@ export default function Tweet({
 }: Tweet) {
   // console.log(tweet.user.username)
   const timeAgo = new TimeAgo("en-US");
-  console.log(id)
 
   return (
     <section
