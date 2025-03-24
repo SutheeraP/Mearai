@@ -16,21 +16,21 @@ export default function Page() {
       isLoading: userLoading,
       isError: userIsError,
       error: userError,
-    } = api.tweet.getUser.useQuery();
+    } = api.tweet.getUser.useQuery({ username: username });
 
     const {
       data: userPost,
       isLoading: postLoading,
       isError: postIsError,
       error: postError,
-    } = api.tweet.getTweetbyUser.useQuery();
+    } = api.tweet.getTweetbyUser.useQuery({ username: username });
 
     const {
       data: userLiked,
       isLoading: likedLoading,
       isError: likedIsError,
       error: likedError,
-    } = api.tweet.getUserLikeTweet.useQuery();
+    } = api.tweet.getUserLikeTweet.useQuery({ username: username });
 
     if (userLoading) {
       return <div>user loading</div>;

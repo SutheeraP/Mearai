@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
     deletePayload, tweetPayload, updatePayload, likePayload, filePayload,
+    getUserPayload, getUserTweetsPayload, getUserLikeTweetsPayload
 } from "./interface";
 import cuid2 from "@paralleldrive/cuid2";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -171,12 +172,12 @@ export const tweetRouter = createTRPCRouter({
             }
             return urls;
         }),
-    getUser: publicProcedure.query(async ({ctx}) => {
+    getUser: publicProcedure.input(getUserPayload).query(async ({ ctx, input }) => {
         if (!ctx.auth.userId) {
             throw new Error('Unauthorized');
         }
         const user = await ctx.db.user.findUnique({
-            where: { clerkId: ctx.auth.userId }
+            where: { username: input.username }
         })
 
         if (!user) {
@@ -187,13 +188,13 @@ export const tweetRouter = createTRPCRouter({
         }
         return user;
     }),
-    getTweetbyUser: publicProcedure.query(async ({ ctx }) => {
+    getTweetbyUser: publicProcedure.input(getUserTweetsPayload).query(async ({ ctx, input }) => {
         if (!ctx.auth.userId) {
             throw new Error('Unauthorized');
         }
 
         const user = await ctx.db.user.findUnique({
-            where: { clerkId: ctx.auth.userId },
+            where: { username: input.username },
             include: {
                 tweets: {
                     include: {
@@ -221,7 +222,7 @@ export const tweetRouter = createTRPCRouter({
         }
         return extendTweet;
     }),
-    getUserLikeTweet: publicProcedure.query(async ({ ctx, input }) => {
+    getUserLikeTweet: publicProcedure.input(getUserLikeTweetsPayload).query(async ({ ctx, input }) => {
         if (!ctx.auth.userId) {
             throw new Error('Unauthorized');
         }
@@ -230,7 +231,11 @@ export const tweetRouter = createTRPCRouter({
             where: {
                 tweetLikes: {
                     some: {
-                        userId: ctx.userId,
+                        user: {
+                            is: {
+                                username: input.username
+                            }
+                        },
                     },
                 },
             },
