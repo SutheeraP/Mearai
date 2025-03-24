@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className="flex flex-col divide-y divide-slate-500 border-x border-gray-800 pb-20 md:border-slate-500">
+      <div className="flex flex-col divide-y divide-slate-500 border-gray-800 pb-20">
         {tweets.map((tweet) => (
           <Tweet
             id={tweet.id}

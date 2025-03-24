@@ -1,5 +1,5 @@
 import React from 'react'
-import TweetSkeleton from '~/app/_components/TweetSkeleton'
+import TweetSkeleton from '~/app/_components/skeleton/TweetSkeleton'
 
 export default function Trend() {
     return (
