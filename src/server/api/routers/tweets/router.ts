@@ -1,9 +1,13 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { deletePayload, tweetPayload, updatePayload, likePayload, filePayload } from "./interface";
+import {
+    deletePayload, tweetPayload, updatePayload, likePayload, filePayload,
+    getUserPayload, getUserTweetsPayload, getUserLikeTweetsPayload
+} from "./interface";
 import cuid2 from "@paralleldrive/cuid2";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "~/server/s3";
+import { TRPCError } from "@trpc/server";
 
 export const tweetRouter = createTRPCRouter({
     getAllTweets: publicProcedure.query(async ({ ctx }) => {
@@ -18,7 +22,8 @@ export const tweetRouter = createTRPCRouter({
             tweet => ({
                 ...tweet,
                 amountLike: tweet.tweetLikes.length,
-                isLiked: tweet.tweetLikes.some((user) => user.userId == ctx.auth.userId)
+                isLiked: tweet.tweetLikes.some((user) => user.userId == ctx.auth.userId),
+                isCurrentUserPost:  tweet.userId == ctx.auth.userId
             }))
         return extendData
     })
@@ -167,4 +172,53 @@ export const tweetRouter = createTRPCRouter({
             }
             return urls;
         }),
+    getUser: publicProcedure.input(getUserPayload).query(async ({ ctx, input }) => {
+        if (!ctx.auth.userId) {
+            throw new Error('Unauthorized');
+        }
+        const user = await ctx.db.user.findUnique({
+            where: { username: input.username }
+        })
+
+        if (!user) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: `User with username '${input.username}' not found.`,
+            });
+        }
+        return user;
+    }),
+    getTweetbyUser: publicProcedure.input(getUserTweetsPayload).query(async ({ ctx, input }) => {
+        if (!ctx.auth.userId) {
+            throw new Error('Unauthorized');
+        }
+
+        const user = await ctx.db.user.findUnique({
+            where: { username: input.username },
+            include: {
+                tweets: {
+                    include: {
+                        user: true,
+                        tweetLikes: true,
+                    }
+                }
+            }
+        })
+
+        const extendTweet = user?.tweets.map(
+            tweet => ({
+                ...tweet,
+                amountLike: tweet.tweetLikes.length,
+                isLiked: tweet.tweetLikes.some((user) => user.userId == ctx.auth.userId),
+                isCurrentUserPost:  tweet.userId == ctx.auth.userId
+            }))
+
+        if (!extendTweet) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: `User with username '${input.username}' have 0 post.`,
+            });
+        }
+        return extendTweet;
+    }),
 });

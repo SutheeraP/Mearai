@@ -27,3 +27,16 @@ export const likePayload = z.object({
 export const filePayload = z.object({
     count: z.number(),
 })
+
+export const getUserPayload = z.object({
+    username: z.string(),
+})
+
+export const getUserTweetsPayload = z.object({
+    username: z.string(),
+})
+
+export const getUserLikeTweetsPayload = z.object({
+    username: z.string(),
+})
+

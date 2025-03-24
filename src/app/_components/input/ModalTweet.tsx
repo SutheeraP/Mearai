@@ -294,7 +294,7 @@ export default function ModalTweet({
                     index={i}
                     length={existImage.length + preview.length}
                     mode="edit"
-                    path={"https://d2buncfwqfqaws.cloudfront.net/" + image}
+                    path={process.env.NEXT_PUBLIC_AWS_CLOUDFRONT + image}
                     onRemove={() => {
                       setExistImage((pre) => {
                         const copy = [...pre];

@@ -7,8 +7,6 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 TimeAgo.addDefaultLocale(en);
 
-// get current user
-import getCurrentUser from "~/app/function/currentUser";
 
 // component
 import EditTweet from "~/app/_components/input/EditTweet";
@@ -16,7 +14,7 @@ import LikeTweet from "~/app/_components/input/LikeTweet";
 import ImageTweet from "~/app/_components/layout/ImageTweet";
 import DeleteTweet from "~/app/_components/input/DeleteTweet";
 
-export default async function Tweet({
+export default function Tweet({
   id,
   text,
   timestamp,
@@ -26,19 +24,15 @@ export default async function Tweet({
   likes,
   images,
   isLiked,
+  isCurrentUserPost,
 }: Tweet) {
   // console.log(tweet.user.username)
   const timeAgo = new TimeAgo("en-US");
-
-  // check auth to show delete button
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    throw new Error("Unauthorized");
-  }
+  console.log(id)
 
   return (
     <section
-      key={id}
+      // key={id}
       className="flex gap-4 px-3 py-3 text-sm md:px-4 md:text-base"
     >
       <div className="relative aspect-square h-12 w-12">
@@ -70,7 +64,7 @@ export default async function Tweet({
                 index={i}
                 length={images.length}
                 mode="show"
-                path={process.env.AWS_CLOUDFRONT + image}
+                path={process.env.NEXT_PUBLIC_AWS_CLOUDFRONT + image}
               />
             ))}
           </div>
@@ -80,7 +74,7 @@ export default async function Tweet({
         <div className="flex justify-between">
           <LikeTweet tweetId={id} isLiked={isLiked} likes={likes} />
           <div className="flex items-center gap-4">
-            {currentUser.id == userId && (
+            {isCurrentUserPost && (
               <>
                 <EditTweet tweetId={id} tweetText={text} tweetImage={images} />
                 <DeleteTweet tweetId={id} />

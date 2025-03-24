@@ -21,6 +21,7 @@ export default async function Home() {
             isLiked={tweet.isLiked}
             images={tweet.tweetImages}
             key={tweet.id}
+            isCurrentUserPost={tweet.isCurrentUserPost}
           />
         ))}
       </div>

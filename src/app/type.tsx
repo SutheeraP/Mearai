@@ -8,4 +8,5 @@ export type Tweet = {
   likes: number;
   isLiked: boolean;
   images: string[];
+  isCurrentUserPost: boolean;
 };

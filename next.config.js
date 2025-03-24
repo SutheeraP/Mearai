@@ -11,11 +11,11 @@ const config = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "img.clerk.com"
+        hostname: "img.clerk.com",
       },
       {
         protocol: "https",
-        hostname: "d2buncfwqfqaws.cloudfront.net"
+        hostname: "d2buncfwqfqaws.cloudfront.net",
       },
     ],
   },
