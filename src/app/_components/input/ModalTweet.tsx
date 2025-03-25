@@ -209,7 +209,7 @@ export default function ModalTweet({
   return (
     <form
       action={handleSubmit}
-      className="absolute left-0 top-0 z-10 h-full w-screen md:bg-main md:bg-opacity-10 md:backdrop-blur-sm"
+      className="absolute left-0 top-0 z-20 h-full w-screen md:bg-main md:bg-opacity-10 md:backdrop-blur-sm"
     >
       <div className="mx-auto h-full bg-dark px-4 md:mt-12 md:h-fit md:w-[500px] md:rounded-md">
         {/* top */}
