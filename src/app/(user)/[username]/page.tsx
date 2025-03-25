@@ -81,7 +81,7 @@ export default function Page() {
             setSelectedTab("post");
           }}
         >
-          Posts
+          {userPost && userPost?.length <= 1 ? "Post" : "Posts"}
         </div>
         <div
           className={`cursor-pointer border-b-2 px-4 py-4 ${selectedTab == "like" ? "border-main" : "border-slate-500 border-opacity-50"}`}
@@ -89,7 +89,7 @@ export default function Page() {
             setSelectedTab("like");
           }}
         >
-          Likes
+          {userLiked && userLiked?.length <= 1 ? "Like" : "Likes"}
         </div>
       </section>
       <div className="flex flex-col divide-y divide-slate-500 border-x border-gray-800 pb-20">
