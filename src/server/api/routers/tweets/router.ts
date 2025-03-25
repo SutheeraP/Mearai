@@ -282,13 +282,25 @@ export const tweetRouter = createTRPCRouter({
         if (!ctx.auth.userId) {
             throw new Error('Unauthorized');
         }
-        const result = await ctx.db.tweet.findMany({ where: { text: { contains: input.text } } })
+        const result = await ctx.db.tweet.findMany(
+            {
+                where: { text: { contains: input.text, mode: 'insensitive', } },
+                include: { user: true, tweetLikes: true }, // Include the related user object
+                orderBy: { timestamp: "desc" },
+            })
         if (!result) {
             throw new TRPCError({
                 code: 'NOT_FOUND',
                 message: `No Result.`,
             });
         }
-        return result;
+        const extendData = result.map(
+            tweet => ({
+                ...tweet,
+                amountLike: tweet.tweetLikes.length,
+                isLiked: tweet.tweetLikes.some((user) => user.userId == ctx.auth.userId),
+                isCurrentUserPost: tweet.userId == ctx.auth.userId
+            }))
+        return extendData
     })
 });
