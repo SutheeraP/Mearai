@@ -5,6 +5,7 @@ import { api } from "~/trpc/react";
 import Tweet from "~/app/_components/layout/Tweet";
 import Image from "next/image";
 import { useState } from "react";
+import Navbar from "~/app/_components/layout/Navbar";
 
 export default function Page() {
   const { username } = useParams();
@@ -57,7 +58,7 @@ export default function Page() {
   }
 
   return (
-    <div className="relative">
+    <div>
       {user ? (
         <section className="my-6 flex flex-col gap-3 text-center">
           <div className="relative mx-auto aspect-square h-24">
@@ -132,6 +133,9 @@ export default function Page() {
             Nothing liked yet.
           </div>
         )}
+      </div>
+      <div className="md:hidden">
+        <Navbar />
       </div>
     </div>
   );

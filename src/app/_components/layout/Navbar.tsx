@@ -6,8 +6,15 @@ import ModalTweet from "~/app/_components/input/ModalTweet";
 import SearchIcon from "~/app/_components/svg/SearchIcon";
 import ProfileIcon from "~/app/_components/svg/ProfileIcon";
 import { useState } from "react";
+import { api } from "~/trpc/react";
 
 export default function Navbar() {
+  const {
+    data: user,
+    isLoading: userLoading,
+    isError: userIsError,
+    error: userError,
+  } = api.tweet.getCurrentUser.useQuery();
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -22,9 +29,13 @@ export default function Navbar() {
       )}
       {/* md */}
       <div className="hidden flex-col gap-2 px-3 text-sm md:flex md:pr-0 md:text-base">
-        <NavItem icon={HomeIcon} label="Home" />
-        <NavItem icon={SearchIcon} label="Search" />
-        <NavItem icon={ProfileIcon} label="Profile" />
+        <NavItem icon={HomeIcon} label="Home" path="/" />
+        <NavItem icon={SearchIcon} label="Search" path="search" />
+        <NavItem
+          icon={ProfileIcon}
+          label="Profile"
+          path={`/${user?.username}`}
+        />
         <div
           className="mt-4 w-full cursor-pointer rounded-md bg-slate-100 py-2 text-center font-semibold uppercase text-dark hover:bg-main"
           onClick={() => {
@@ -52,9 +63,13 @@ export default function Navbar() {
           </div>
 
           <div className="grid grid-cols-3 place-items-center border-t border-slate-500 bg-dark bg-opacity-80 py-5 backdrop-blur-sm">
-            <NavItem icon={HomeIcon} label="Home" />
-            <NavItem icon={SearchIcon} label="Search" />
-            <NavItem icon={ProfileIcon} label="Profile" />
+            <NavItem icon={HomeIcon} label="Home" path="/" />
+            <NavItem icon={SearchIcon} label="Search" path="search" />
+            <NavItem
+              icon={ProfileIcon}
+              label="Profile"
+              path={`/${user?.username}`}
+            />
           </div>
         </div>
       </div>

@@ -263,5 +263,18 @@ export const tweetRouter = createTRPCRouter({
             });
         }
         return extendTweet;
+    }),
+    getCurrentUser: publicProcedure.query(async ({ ctx }) => {
+        if (!ctx.auth.userId) {
+            throw new Error('Unauthorized');
+        }
+        const user = await ctx.db.user.findUnique({ where: { clerkId: ctx.auth.userId } })
+        if (!user) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: `User not found.`,
+            });
+        }
+        return user;
     })
 });
