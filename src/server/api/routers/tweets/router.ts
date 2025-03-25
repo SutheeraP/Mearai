@@ -1,7 +1,8 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import {
     deletePayload, tweetPayload, updatePayload, likePayload, filePayload,
-    getUserPayload, getUserTweetsPayload, getUserLikeTweetsPayload
+    getUserPayload, getUserTweetsPayload, getUserLikeTweetsPayload,
+    getSearchPayload
 } from "./interface";
 import cuid2 from "@paralleldrive/cuid2";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -276,5 +277,18 @@ export const tweetRouter = createTRPCRouter({
             });
         }
         return user;
+    }),
+    getSearch: publicProcedure.input(getSearchPayload).query(async ({ ctx, input }) => {
+        if (!ctx.auth.userId) {
+            throw new Error('Unauthorized');
+        }
+        const result = await ctx.db.tweet.findMany({ where: { text: { contains: input.text } } })
+        if (!result) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: `No Result.`,
+            });
+        }
+        return result;
     })
 });

@@ -40,3 +40,9 @@ export const getUserLikeTweetsPayload = z.object({
     username: z.string(),
 })
 
+export const getSearchPayload = z.object({
+    text: z.string(),
+})
+
+
+
