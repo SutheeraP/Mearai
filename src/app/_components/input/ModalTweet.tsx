@@ -166,7 +166,7 @@ export default function ModalTweet({
     });
 
     const tweetTextVal = formData.get("tweetText") as string;
-    const uploads: string[] = existImage; // list of uploaded
+    const uploads: string[] = [...existImage]; // Create a new array using spread
 
     // collect image path in upload[]
     if (file) {

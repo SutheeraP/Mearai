@@ -1,6 +1,5 @@
 "use client";
 import { useParams } from "next/navigation";
-// import { api } from "~/trpc/server";
 import { api } from "~/trpc/react";
 import Tweet from "~/app/_components/layout/Tweet";
 import Image from "next/image";
@@ -27,6 +26,7 @@ export default function Page() {
     isLoading: postLoading,
     isError: postIsError,
     error: postError,
+    refetch: postRefetch,
   } = api.tweet.getTweetbyUser.useQuery({ username: username });
 
   const {
@@ -34,6 +34,7 @@ export default function Page() {
     isLoading: likedLoading,
     isError: likedIsError,
     error: likedError,
+    refetch: likeRefetch,
   } = api.tweet.getUserLikeTweet.useQuery({ username: username });
 
   if (userIsError) {
