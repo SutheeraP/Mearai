@@ -119,7 +119,7 @@ export default function ModalTweet({
   const updateTweet = api.tweet.updateTweet.useMutation({
     onSuccess: async (data) => {
       // console.log("Update tweet successfully:", data);
-      router.push("/");
+      // router.push("/");
       router.refresh();
       setIsSubmitting(false);
       setTweetText("");
@@ -135,7 +135,7 @@ export default function ModalTweet({
   const createTweet = api.tweet.createTweet.useMutation({
     onSuccess: async (data) => {
       // console.log("Create tweet successfully:", data);
-      router.push("/");
+      // router.push("/");
       router.refresh();
       setIsSubmitting(false);
       setTweetText("");

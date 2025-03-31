@@ -19,7 +19,7 @@ export default function NavItem({
       {/* md */}
       <Link
         href={path}
-        className="hidden w-fit cursor-pointer items-center gap-3 rounded-md hover:bg-opacity-10 px-3 py-2 transition-all hover:bg-slate-500 md:flex"
+        className="hidden w-fit cursor-pointer items-center gap-3 rounded-md px-3 py-2 transition-all hover:bg-slate-500 hover:bg-opacity-10 md:flex"
       >
         <IconComponent size={15} />
         <div className="font-medium uppercase tracking-wider">{label}</div>
