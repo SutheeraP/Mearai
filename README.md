@@ -1,29 +1,59 @@
-# Create T3 App
+# Mearai (มีอะไร)
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This project is a Twitter clone start developed during my internship at [MOHORA](https://mohara.co), built using the T3 Stack. It served as a valuable learning experience in full-stack development, where I was responsible for independently developing and continuously improving its features, guided by MOHORA's documentation and mentorship.
 
-## What's next? How do I make an app with this?
+## Functionality
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+* **User Authentication:**
+    * Login, logout, and registration functionality.
+    * Profile editing.
+* **Post Management:**
+    * Create, read, update, and delete posts.
+* **Image Handling:**
+    * Create, read, and delete images associated with posts.
+* **Search:**
+    * Search functionality for posts.
+* **Post Interactions:**
+    * Like and unlike posts.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+* **Frontend:**
+    * [Next.js](https://nextjs.org): React framework for server-side rendering and static site generation.
+    * [Tailwind CSS](https://tailwindcss.com): Utility-first CSS framework for rapid UI development.
+* **Backend:**
+    * [tRPC](https://trpc.io): End-to-end typesafe APIs.
+    * [Neon Database](https://neon.tech/): Serverless PostgresSQL platform.
+    * [PostgreSQL](https://www.postgresql.org): Relational database management system.
+    * [AWS S3](https://aws.amazon.com/s3/): Scalable object storage for images.
+* **Authentication:**
+    * [Clerk](https://clerk.com): User authentication and management platform.
+* **Language:**
+    * [TypeScript](https://www.typescriptlang.org): Static type checker for JavaScript.
 
-## Learn More
+## Learning Outcomes
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+Through this project, I gained significant experience and skills in:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+* **Full-Stack Development:**
+    * Building and integrating frontend and backend components.
+    * Managing data flow between the client and server.
+* **Self-Improvement:**
+    * Independently developing and troubleshooting features.
+    * Learning and applying new technologies.
+    * Effectively utilizing documentation and mentorship.
+* **Database Management:**
+    * Designing and interacting with PostgreSQL databases.
+    * Utilizing serverless database platforms (Neon).
+* **Cloud Storage:**
+    * Integrating and managing files with AWS S3.
+* **API Development:**
+    * Building typesafe APIs using tRPC.
+* **Authentication Implementation:**
+    * Integrating and utilizing Clerk for user authentication.
+* **Clerk Webhooks:**
+    * Implementing and handling Clerk webhooks for server-side user management and event handling.
+* **Version Control:**
+    * Collaborating using Git and GitHub.
+* **Problem solving:**
+    * Debugging and solving complex problems.
