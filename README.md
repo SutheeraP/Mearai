@@ -28,6 +28,8 @@ This project is a Twitter clone start developed during my internship at [MOHORA]
     * [AWS S3](https://aws.amazon.com/s3/): Scalable object storage for images.
 * **Authentication:**
     * [Clerk](https://clerk.com): User authentication and management platform.
+* **Deployment:**
+    * [Vercel](https://vercel.com/): Serverless platform for frontend and backend applications.
 * **Language:**
     * [TypeScript](https://www.typescriptlang.org): Static type checker for JavaScript.
 
@@ -57,3 +59,7 @@ Through this project, I gained significant experience and skills in:
     * Collaborating using Git and GitHub.
 * **Problem solving:**
     * Debugging and solving complex problems.
+ 
+## Deployment
+
+The project is deployed and accessible at: [mearai.vercel.app](https://mearai.vercel.app)
